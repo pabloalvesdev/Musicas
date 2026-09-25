@@ -1,5 +1,5 @@
 import { darkTheme } from "@/constants/theme";
-import { getLocalSongs } from "@/services/files";
+import { getSavedSongs } from "@/services/files";
 import React, {
   createContext,
   useCallback,
@@ -57,9 +57,15 @@ const MainProvider = ({ children }: IProps) => {
 
   const refreshBaseMusics = useCallback(async () => {
     setLoad(true);
-    const response = await getLocalSongs();
-    setBaseMusics(response);
-    setLoad(false);
+    try {
+      const response = await getSavedSongs();
+      console.log("📂 Músicas retornadas do SQLite:", response.length);
+      setBaseMusics(response);
+    } catch (error) {
+      console.error("❌ Erro ao ler SQLite no Context:", error);
+    } finally {
+      setLoad(false);
+    }
   }, []);
 
   const values = useMemo<IMainContext>(

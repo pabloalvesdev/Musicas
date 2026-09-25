@@ -1,9 +1,11 @@
-interface IMusic {
+export interface IMusic {
   id: string;
   url: string;
   title: string;
-  duration: number;
   artist: string;
+  album: string;
+  genre?: string;
+  duration: number;
 }
 
 export default IMusic;
