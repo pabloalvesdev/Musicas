@@ -4,7 +4,9 @@ import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
+import { playSong } from "@/services/player";
 import { useEffect, useMemo, useState } from "react";
+import { TouchableOpacity } from "react-native";
 
 function Home() {
   const { customTheme } = useTheme();
@@ -24,7 +26,11 @@ function Home() {
       <Section isContained>
         <List
           data={baseMusics}
-          listItem={(a) => <MusicItem item={a.item} />}
+          listItem={(a) => (
+            <TouchableOpacity onPress={() => playSong(a.item.url)}>
+              <MusicItem item={a.item} />
+            </TouchableOpacity>
+          )}
           gap={10}
         />
       </Section>

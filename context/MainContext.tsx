@@ -1,5 +1,5 @@
 import { darkTheme } from "@/constants/theme";
-import { getLocalSongs } from "@/services/getAudioFiles";
+import { getLocalSongs } from "@/services/files";
 import React, {
   createContext,
   useCallback,
