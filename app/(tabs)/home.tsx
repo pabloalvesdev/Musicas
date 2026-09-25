@@ -4,7 +4,7 @@ import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
-import { playSong } from "@/services/player";
+import { playAudio } from "@/services/player";
 import { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
@@ -27,7 +27,7 @@ function Home() {
         <List
           data={baseMusics}
           listItem={(a) => (
-            <TouchableOpacity onPress={() => playSong(a.item.url)}>
+            <TouchableOpacity onPress={() => playAudio(a.item.url)}>
               <MusicItem item={a.item} />
             </TouchableOpacity>
           )}

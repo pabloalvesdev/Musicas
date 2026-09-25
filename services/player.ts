@@ -1,20 +1,52 @@
 import { createAudioPlayer } from "expo-audio";
 
-let player = createAudioPlayer();
+// Instância única mantida na memória
+const player = createAudioPlayer();
 
-export function playSong(url: string) {
-  player.replace(url);
-  player.play();
+/**
+ * Toca uma nova música a partir da URL/URI informada.
+ */
+export async function playAudio(url: string) {
+  try {
+    // 1. Carrega a nova fonte no player
+    player.replace(url);
+
+    // 2. Toca a música
+    player.play();
+  } catch (error) {
+    console.error("Erro ao reproduzir áudio:", error);
+  }
 }
 
-export function pauseSong() {
-  player.pause();
+/**
+ * Retoma a reprodução da música atual que estava pausada.
+ */
+export function resumeAudio() {
+  if (!player.playing) {
+    player.play();
+  }
 }
 
-export function resumeSong() {
-  player.play();
+/**
+ * Pausa a reprodução atual.
+ */
+export function pauseAudio() {
+  if (player.playing) {
+    player.pause();
+  }
 }
 
-export function stopSong() {
-  player.remove();
+/**
+ * Altera a posição da música (em segundos).
+ */
+export function seekAudio(seconds: number) {
+  player.seekTo(seconds);
+}
+
+/**
+ * Retorna o objeto do player caso você precise registrar ouvintes de evento
+ * (ex: para monitorar o progresso em tempo real na barra de seek).
+ */
+export function getAudioPlayerInstance() {
+  return player;
 }
