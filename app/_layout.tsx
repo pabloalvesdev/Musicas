@@ -1,56 +1,110 @@
-import { useFonts } from 'expo-font';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Slot } from "expo-router";
+import { useState } from "react";
+import { LogBox } from "react-native";
+import MainProvider from "../context/MainContext";
 
-import { useColorScheme } from '@/components/useColorScheme';
+// // Impede o app de ocultar a splash até que tudo esteja pronto
+// SplashScreen.preventAutoHideAsync().catch(() => {})
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+LogBox.ignoreLogs(["Text"]);
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
+// function AuthRedirect() {
+//   const { user } = useAuth()
+//   const router = useRouter()
+//   const pathname = usePathname()
+//   const [at, setAt] = useState<string | null>(null)
+//   const [it, setIt] = useState(0)
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+//   const needWizard = useMemo(async () => {
+//     const creditCardsResponse = await CreditCardService.all()
+//     const accountsResponse = await AccountService.all()
+//     const savingsResponse = await SavingService.all()
+//     const fixedsResponse = await TransactionService.getFixed()
+
+//     const hasCreditCards =
+//       creditCardsResponse.Status === 'SUCCESS' &&
+//       creditCardsResponse.Data.length > 0 // tem cartao de credito?
+//     const hasAccounts =
+//       accountsResponse.Status === 'SUCCESS' && accountsResponse.Data.length > 0 // tem conta?
+//     const hasSavings =
+//       savingsResponse.Status === 'SUCCESS' && savingsResponse.Data.length > 0 // tem algum investimento?
+//     const hasFixeds =
+//       fixedsResponse.Status === 'SUCCESS' && fixedsResponse.Data.length > 0 // tem alguma conta fixa?
+
+//     return !hasCreditCards && !hasAccounts && !hasSavings && !hasFixeds
+//   }, [])
+
+//   const getToken = async () => {
+//     try {
+//       const accessToken = await AsyncStorage.getItem('accessToken')
+//       const chaves = await AsyncStorage.getAllKeys()
+//       // console.log(`Chaves do storage: ${chaves.join(",")}`)
+//       // if (__DEV__) {
+//       //   router.replace('/test')
+//       //   return
+//       // }
+
+//       if (accessToken) {
+//         router.replace('/(tabs)/home')
+//         // const wizard = await needWizard
+//         // if (wizard) router.replace('/wizard/wellcome')
+//         // else router.replace('/(tabs)/home')
+//       } else {
+//         console.log('Sem token, redirecionando para /login')
+//         router.replace('/auth/wellcome')
+//       }
+//     } catch (err) {
+//       console.error('Erro ao acessar AsyncStorage:', err)
+//     }
+//   }
+
+//   useEffect(() => {
+//     if (it < 2) getToken()
+
+//     // router.replace("/(tabs)/home");
+//     // if (at === null && !pathname.startsWith("/auth")) {
+//     //   router.replace("/auth/wellcome");
+//     // }
+//     // if (at && pathname === "/") {
+//     //   router.replace("/(tabs)/home");
+//     // }
+//   }, [it])
+
+//   return null
+// }
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+  // Carrega as fontes uma vez no início
+  // useEffect(() => {
+  //   async function prepare() {
+  //     try {
+  //       await Font.loadAsync({
+  //         "Inter-Regular": require("@/assets/fonts/Inter_18pt-Regular.ttf"),
+  //         "Inter-Bold": require("@/assets/fonts/Inter_18pt-Bold.ttf"),
+  //         "Inter-Italic": require("@/assets/fonts/Inter_18pt-Italic.ttf"),
+  //         "Inter-BoldItalic": require("@/assets/fonts/Inter_18pt-BoldItalic.ttf"),
+  //       });
+  //     } catch (e) {
+  //       console.warn("Erro ao carregar fontes:", e);
+  //     } finally {
+  //       setFontsLoaded(true);
+  //       await SplashScreen.hideAsync();
+  //     }
+  //   }
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+  //   prepare();
+  // }, []);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  // if (!fontsLoaded) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <MainProvider>
+      {/* <Alert />
+        <Dialog /> */}
+      {/* <AuthRedirect /> */}
+      <Slot />
+    </MainProvider>
   );
 }
