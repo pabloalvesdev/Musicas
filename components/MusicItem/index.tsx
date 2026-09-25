@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks";
 import { IMusic } from "@/interfaces";
 import { View } from "react-native";
 import Text from "../Text";
@@ -8,10 +9,14 @@ interface Props {
 }
 
 const MusicItem = ({ item }: Props) => {
+  const { customTheme } = useTheme();
   return (
-    <View style={styles.card}>
+    <View style={[styles.card]}>
       <Text size="md" bold>
         {item.title}
+      </Text>
+      <Text size="sm" color="secondary">
+        {item.artist}
       </Text>
     </View>
   );

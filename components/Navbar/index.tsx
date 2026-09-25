@@ -1,65 +1,5 @@
-// import { Text } from "@/src/components";
-// import { Alert, TouchableOpacity, View } from "react-native";
-// import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-// import { useTheme } from "@/src/hooks";
-// import darkenHexColor from "@/src/utils/darkenHexColor";
-// import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
-// import { useMainContext } from "@/src/context/MainContext";
-// import { lightTheme } from "@/src/constants/theme";
-
-// const iconNames: any = {
-//     home: "home",
-//     settings: "settings",
-//     transactions: "credit-card",
-//     investiments: "timeline"
-// }
-
-// const TabBar = ({ descriptors, insets, navigation, state }: BottomTabBarProps) => {
-//     const { customTheme } = useTheme();
-//     const toogleToIcon = (e: any) => {
-//         console.log(e)
-//     }
-//     return(
-//         <View style={{ backgroundColor: customTheme.colors.bgDefault }}>
-//             <View style={{
-//                 alignSelf: "center",
-//                 width: "80%",
-//                 bottom: 50,
-//                 paddingInline: 0,
-//                 paddingBlock: 10,
-//                 backgroundColor: customTheme.primaryColor,
-//                 borderRadius: 20,
-//                 flexDirection: "row",
-//                 justifyContent: "space-around"
-//             }}>
-//             <View style={{ position: "absolute", height: 40, width: 40, borderRadius: 10, backgroundColor: darkenHexColor(customTheme.primaryColor, 0.3) }} />
-//             {state.routes.map((route, index) => {
-//                     return(
-//                         <TouchableOpacity onPress={toogleToIcon} key={`${route.name} ${index}`}
-//                             style={{
-//                                 padding: 10,
-//                                 borderRadius: 10,
-//                                 backgroundColor: state.index === index ? darkenHexColor(customTheme.primaryColor, 0.3) : "none",
-
-//                             }}
-//                         >
-//                             <MaterialIcons
-//                                 color={lightTheme.colors.textInverse}
-//                                 size={25}
-//                                 name={iconNames[route.name]}
-//                             />
-//                         </TouchableOpacity>
-//                     )
-//             })}
-//             </View>
-//         </View>
-//     )
-// }
-
-// export default TabBar;
-
 import { useTheme } from "@/hooks";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity, View } from "react-native";
 
 import { useMainContext } from "@/context/MainContext";
@@ -71,9 +11,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const iconNames: any = {
-  home: "home",
-  library: "timeline",
+const iconNames: Record<string, string> = {
+  home: "home", // Casinha em linhas finas
+  library: "disc", // Disco de vinil minimalista
+  favorites: "heart", // Coração em contorno fino
 };
 
 const TabBar = ({ navigation, state }: any) => {
@@ -111,25 +52,24 @@ const TabBar = ({ navigation, state }: any) => {
       <View
         style={{
           display: visible,
-          bottom: 30, // <<< distância da parte inferior (ajusta como quiser)
+          bottom: 30,
           left: 0,
           right: 0,
           alignItems: "center",
-          zIndex: 1000, // garante que fique por cima do conteúdo
+          zIndex: 1000,
         }}
-        pointerEvents="box-none" // permite interação com conteúdo atrás da tab bar
+        pointerEvents="box-none"
       >
         <View
           style={{
             alignSelf: "center",
             width: "60%",
             paddingVertical: 10,
-            backgroundColor: customTheme.colors.bgDark,
+            backgroundColor: customTheme.colors.bgDefault,
             borderRadius: 20,
             flexDirection: "row",
             justifyContent: "space-around",
             position: "relative",
-            // sombra opcional (pode tirar se não quiser)
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 5 },
             shadowOpacity: 0.1,
@@ -137,17 +77,17 @@ const TabBar = ({ navigation, state }: any) => {
             elevation: 5,
           }}
         >
-          {/* Destaque animado */}
+          {/* Sublinhado animado */}
           <Animated.View
             style={[
               {
                 position: "absolute",
-                height: 40,
-                borderRadius: 10,
-                backgroundColor: primaryColor,
-                top: 10,
+                height: 3, // <<< Espessura da linha
+                borderRadius: 2, // <<< Pontas ligeiramente arredondadas
+                backgroundColor: primaryColor, // <<< Cor primária da marca
+                bottom: 4, // <<< Posiciona rente ao rodapé da tab bar
                 left: 0,
-                zIndex: 0,
+                zIndex: 1,
               },
               animatedHighlightStyle,
             ]}
@@ -170,14 +110,14 @@ const TabBar = ({ navigation, state }: any) => {
               style={{
                 padding: 10,
                 borderRadius: 10,
-                zIndex: 1,
+                zIndex: 2,
               }}
             >
-              <MaterialIcons
+              <MaterialCommunityIcons
                 color={
-                  state.index == index
-                    ? customTheme.colors.textInverse
-                    : customTheme.colors.textPrimary
+                  state.index === index
+                    ? primaryColor // <<< Ícone ativo ganha a cor primária
+                    : customTheme.colors.textPrimary // <<< Ícone inativo fica padrão
                 }
                 size={25}
                 name={iconNames[route.name]}

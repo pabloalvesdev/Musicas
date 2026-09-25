@@ -47,9 +47,9 @@ const lightColors = {
 };
 
 const darkColors = {
-  bgDefault: "#111316", // ← atualizado
   bgLight: "#2A2F36",
-  bgDark: "#0d0e11",
+  bgDark: "#0b0c0e",
+  bgDefault: "#0d0e11", //"#111316", // ← atualizado
 
   textPrimary: "#B0B5BF", //"#9CA3AF",
   textSecondary: "#64748B",

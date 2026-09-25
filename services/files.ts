@@ -1,5 +1,4 @@
 import { IMusic } from "@/interfaces";
-import { AudioMetadata } from "@/modules/audio-metadata";
 import {
   AssetField,
   MediaType,
@@ -24,14 +23,13 @@ export async function getLocalSongs(): Promise<IMusic[]> {
     console.log(`🎵 ${assets.length} arquivos de áudio encontrados`);
 
     const formattedSongs: IMusic[] = [];
-
     for (const asset of assets) {
       const filename = await asset.getFilename();
       const uri = await asset.getUri();
-      if (formattedSongs.length == 21) {
-        const metadata = await AudioMetadata.getMetadata(uri);
-        console.log("🎼 METADATA:", metadata);
-      }
+      // if (formattedSongs.length == 21) {
+      //   const metadata = await AudioMetadata.getMetadata(uri);
+      //   console.log("🎼 METADATA:", metadata);
+      // }
 
       formattedSongs.push({
         id: String(asset.id),

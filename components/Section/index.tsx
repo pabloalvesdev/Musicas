@@ -11,6 +11,7 @@ interface ISectionHeader {
 
 interface IProps {
   children: any;
+  isShadowed?: boolean;
   isContained?: boolean;
   header?: ISectionHeader;
   height?: number | "full";
@@ -37,7 +38,13 @@ const SectionHeader = ({ header }: { header: ISectionHeader }) => {
   );
 };
 
-const Section = ({ height, children, isContained, header }: IProps) => {
+const Section = ({
+  height,
+  children,
+  isContained,
+  isShadowed,
+  header,
+}: IProps) => {
   const { customTheme } = useTheme();
   return (
     <>
@@ -48,7 +55,14 @@ const Section = ({ height, children, isContained, header }: IProps) => {
             width: "100%",
             borderRadius: customTheme.radius.xl,
             marginBottom: customTheme.spacing.xxl,
-            padding: isContained ? customTheme.spacing.md : 0,
+            padding: isContained || isShadowed ? customTheme.spacing.md : 0,
+          },
+          isShadowed && {
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 5 },
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+            elevation: 5,
           },
           isContained && { backgroundColor: customTheme.colors.bgDark },
           height != undefined &&

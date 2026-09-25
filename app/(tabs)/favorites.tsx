@@ -8,7 +8,7 @@ import { playAudio } from "@/services/player";
 import { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-function Home() {
+function Favorites() {
   const { customTheme } = useTheme();
   const { baseMusics, refreshBaseMusics, setIsDarkMode } = useMainContext();
   const toogleTheme = () => setIsDarkMode((prev) => (prev === 0 ? 1 : 0));
@@ -23,7 +23,7 @@ function Home() {
 
   return (
     <Wrapper>
-      <Section>
+      <Section isContained>
         <List
           data={baseMusics}
           listItem={(a) => (
@@ -38,4 +38,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Favorites;

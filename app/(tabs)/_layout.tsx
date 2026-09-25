@@ -27,6 +27,7 @@ export default function AppTabsLayout() {
     >
       <Tabs.Screen name="home" options={{ title: "Início" }} />
       <Tabs.Screen name="library" options={{ title: "Biblioteca" }} />
+      <Tabs.Screen name="settings" options={{ title: "Configurações" }} />
     </Tabs>
   );
 }
