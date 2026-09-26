@@ -68,7 +68,8 @@ interface IProps {
     | "disabled"
     | "danger"
     | "success"
-    | "warning";
+    | "warning"
+    | "default";
   propTheme?: ITheme;
 }
 
@@ -88,6 +89,7 @@ const Text = ({ children, size, bold, opaque, color, propTheme }: IProps) => {
         success: refTheme.colors.success,
         danger: refTheme.colors.danger,
         warning: refTheme.colors.warning,
+        default: refTheme.colors.textPrimary,
       };
 
       result = colArray[color];

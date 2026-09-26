@@ -62,7 +62,7 @@ export default function MiniPlayer() {
         styles.container,
         {
           backgroundColor: customTheme.colors.bgDark,
-          borderColor: customTheme.colors.danger || "rgba(255,255,255,0.08)",
+          borderColor: customTheme.colors.bgDark,
         },
       ]}
     >
@@ -84,7 +84,7 @@ export default function MiniPlayer() {
         <View
           style={[
             styles.coverPlaceholder,
-            { backgroundColor: customTheme.colors.danger },
+            { backgroundColor: customTheme.colors.bgDefault },
           ]}
         >
           <Feather

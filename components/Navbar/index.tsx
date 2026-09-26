@@ -52,7 +52,6 @@ const TabBar = ({ navigation, state }: any) => {
       <View
         style={{
           display: visible,
-          bottom: 30,
           left: 0,
           right: 0,
           alignItems: "center",
@@ -63,18 +62,13 @@ const TabBar = ({ navigation, state }: any) => {
         <View
           style={{
             alignSelf: "center",
-            width: "60%",
+            width: "80%",
             paddingVertical: 10,
             backgroundColor: customTheme.colors.bgDefault,
             borderRadius: 20,
             flexDirection: "row",
             justifyContent: "space-around",
             position: "relative",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 5 },
-            shadowOpacity: 0.1,
-            shadowRadius: 5,
-            elevation: 5,
           }}
         >
           {/* Sublinhado animado */}
