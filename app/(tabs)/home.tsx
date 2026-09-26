@@ -1,7 +1,6 @@
 import { Wrapper } from "@/components";
 import List from "@/components/List";
 import MusicItem from "@/components/MusicItem";
-import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { usePlayerStore } from "@/stores/playerStore";
@@ -35,17 +34,15 @@ function Home() {
 
   return (
     <Wrapper>
-      <Section>
-        <List
-          data={baseMusics}
-          listItem={(a: any) => (
-            <TouchableOpacity onPress={() => handleSelectSong(a.item)}>
-              <MusicItem item={a.item} />
-            </TouchableOpacity>
-          )}
-          gap={10}
-        />
-      </Section>
+      <List
+        data={baseMusics}
+        listItem={(a: any) => (
+          <TouchableOpacity onPress={() => handleSelectSong(a.item)}>
+            <MusicItem item={a.item} />
+          </TouchableOpacity>
+        )}
+        gap={10}
+      />
     </Wrapper>
   );
 }

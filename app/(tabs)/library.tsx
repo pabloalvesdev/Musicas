@@ -6,13 +6,17 @@ import { FlatList, StyleSheet, View } from "react-native";
 const Library = () => {
   const { customTheme } = useTheme();
   const { baseMusics } = useMainContext();
+
+  const artists = [...new Set(baseMusics.map((a) => a.artist))];
+  const genre = [...new Set(baseMusics.map((a) => a.genre))];
+
   return (
     <Wrapper>
-      <TabComponent items={["Artistas", "Albuns", "Genero"]}>
+      <TabComponent items={["Artistas", "Genero", "Pastas (talvez)"]}>
         <FlatList
           style={{ marginTop: 30 }}
           numColumns={2}
-          data={["Autista 1", "Autista 2", "Autista 3", "Autista 4"]}
+          data={artists}
           columnWrapperStyle={{
             justifyContent: "space-around", // Espaça os 2 cards na linha
             marginBottom: 16, // Espaço entre as linhas
@@ -39,7 +43,7 @@ const Library = () => {
         <FlatList
           style={{ marginTop: 30 }}
           numColumns={2}
-          data={["Album 1", "Album 2"]}
+          data={genre}
           columnWrapperStyle={{
             justifyContent: "space-around", // Espaça os 2 cards na linha
             marginBottom: 16, // Espaço entre as linhas

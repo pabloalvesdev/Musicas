@@ -1,7 +1,8 @@
 // import { BottomTabHeaderProps } from "fica no lugar daeuel any ali";
 import { Text } from "@/components";
 import { useTheme } from "@/hooks";
-import { Dimensions, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TabHeader = ({ options }: any) => {
@@ -18,7 +19,8 @@ const TabHeader = ({ options }: any) => {
         style={{
           paddingInline: customTheme.spacing.md,
           flexDirection: "row",
-          justifyContent: "center",
+          justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: customTheme.spacing.xl,
         }}
       >
@@ -27,12 +29,15 @@ const TabHeader = ({ options }: any) => {
             {options.title}
           </Text>
         </View>
-        <View
-          style={{
-            position: "absolute",
-            right: customTheme.spacing.md,
-          }}
-        />{" "}
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity>
+            <MaterialIcons
+              name="settings"
+              size={customTheme.iconSizes.md}
+              color={customTheme.colors.textPrimary}
+            />
+          </TouchableOpacity>
+        </View>
         {/*isso aqui seria melhor confgurar em cada stack*/}
         {/* <Image
           style={{ width: 50, height: 50, borderColor: customTheme.primaryColor, borderWidth: 2, borderRadius: 50 }}
