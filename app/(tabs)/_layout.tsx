@@ -1,7 +1,9 @@
+import MiniPlayer from "@/components/MiniPlayer";
 import TabHeader from "@/components/TabHeader";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { Tabs } from "expo-router";
+import { View } from "react-native";
 import TabBar from "../../components/Navbar";
 
 export default function AppTabsLayout() {
@@ -11,7 +13,10 @@ export default function AppTabsLayout() {
   return (
     <Tabs
       tabBar={(props) => (
-        <TabBar state={props.state} navigation={props.navigation} />
+        <View>
+          <MiniPlayer />
+          <TabBar state={props.state} navigation={props.navigation} />
+        </View>
       )}
       screenOptions={{
         // headerShown: false,
