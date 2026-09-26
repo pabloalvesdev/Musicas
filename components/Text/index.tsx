@@ -99,7 +99,7 @@ const Text = ({ children, size, bold, opaque, color, propTheme }: IProps) => {
   }, [customTheme, color, primaryColor]);
 
   // ⚠️ Aqui é onde trocamos o fontFamily com base no "bold"
-  const fontFamily = bold ? "Inter-Bold" : "Inter-Regular";
+  const fontFamily = bold ? "bold" : "normal";
 
   return (
     <rn.Text
@@ -109,7 +109,7 @@ const Text = ({ children, size, bold, opaque, color, propTheme }: IProps) => {
           opacity: opaque ? 0.5 : 1,
           color: getColorText,
           fontSize: customTheme.fontSizes[size],
-          fontFamily, // <- usamos fontFamily em vez de fontWeight
+          fontWeight: fontFamily,
         },
       ]}
     >

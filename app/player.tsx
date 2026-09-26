@@ -1,7 +1,9 @@
+import { Text as MyText } from "@/components";
+import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { getAudioPlayerInstance } from "@/services/player";
 import { usePlayerStore } from "@/stores/playerStore";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -14,6 +16,7 @@ const formatTime = (seconds: number) => {
 };
 
 export default function PlayerScreen() {
+  const { primaryColor } = useMainContext();
   const router = useRouter();
   const { customTheme } = useTheme();
 
@@ -116,18 +119,23 @@ export default function PlayerScreen() {
 
       {/* Título e Artista */}
       <View style={styles.infoContainer}>
-        <Text
-          numberOfLines={1}
-          style={[styles.title, { color: customTheme.colors.textPrimary }]}
-        >
-          {currentSong.title}
-        </Text>
-        <Text
-          numberOfLines={1}
-          style={[styles.artist, { color: customTheme.colors.textSecondary }]}
-        >
-          {currentSong.artist}
-        </Text>
+        <View>
+          <MyText size="lg" bold>
+            {currentSong.title}
+          </MyText>
+          <MyText size="sm" color="secondary">
+            {currentSong.artist}
+          </MyText>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <MaterialIcons
+              color={customTheme.colors.textDisabled}
+              size={customTheme.iconSizes.lg}
+              name={"favorite-outline"}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Barra de Progresso */}
@@ -166,9 +174,17 @@ export default function PlayerScreen() {
       {/* Controles de Áudio */}
       <View style={styles.controlsRow}>
         <TouchableOpacity onPress={previousSong}>
-          <Feather
-            name="skip-back"
+          <Ionicons
+            name="play-skip-back"
             size={36}
+            color={customTheme.colors.textPrimary}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={previousSong}>
+          <MaterialIcons
+            name="replay-10"
+            size={32}
             color={customTheme.colors.textPrimary}
           />
         </TouchableOpacity>
@@ -180,13 +196,57 @@ export default function PlayerScreen() {
             { backgroundColor: customTheme.primaryColor },
           ]}
         >
-          <Feather name={isPlaying ? "pause" : "play"} size={32} color="#FFF" />
+          <Ionicons
+            name={isPlaying ? "pause" : "play"}
+            size={40}
+            color="#FFF"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={previousSong}>
+          <MaterialIcons
+            name="forward-10"
+            size={32}
+            color={customTheme.colors.textPrimary}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={nextSong}>
-          <Feather
-            name="skip-forward"
+          <Ionicons
+            name="play-skip-forward"
             size={36}
+            color={customTheme.colors.textPrimary}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Mais Opcoes */}
+      <View style={styles.controlsRow}>
+        <TouchableOpacity onPress={previousSong}>
+          <MaterialIcons
+            name="playlist-play"
+            size={30}
+            color={customTheme.colors.textPrimary}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={previousSong}>
+          <Ionicons
+            name="shuffle"
+            size={30}
+            color={customTheme.colors.textPrimary}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={previousSong}>
+          <Ionicons
+            name="repeat"
+            size={30}
+            color={customTheme.colors.textPrimary}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={previousSong}>
+          <MaterialIcons
+            name="playlist-add"
+            size={30}
             color={customTheme.colors.textPrimary}
           />
         </TouchableOpacity>
@@ -226,7 +286,8 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   infoContainer: {
-    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: "100%",
   },
   title: {
@@ -237,7 +298,6 @@ const styles = StyleSheet.create({
   artist: {
     fontSize: 16,
     marginTop: 6,
-    textAlign: "center",
   },
   progressSection: {
     width: "100%",
