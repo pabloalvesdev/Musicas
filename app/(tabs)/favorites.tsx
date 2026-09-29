@@ -10,8 +10,7 @@ import { TouchableOpacity } from "react-native";
 
 function Favorites() {
   const { customTheme } = useTheme();
-  const { baseMusics, refreshBaseMusics, setIsDarkMode } = useMainContext();
-  const toogleTheme = () => setIsDarkMode((prev) => (prev === 0 ? 1 : 0));
+  const { baseMusics, refreshBaseMusics } = useMainContext();
   const options = useMemo(() => {
     return ["a", "b", "c"].map((a) => ({ label: a, value: a }));
   }, []);

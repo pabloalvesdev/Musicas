@@ -9,12 +9,10 @@ import { TouchableOpacity } from "react-native";
 
 function Home() {
   const { customTheme } = useTheme();
-  const { baseMusics, refreshBaseMusics, setIsDarkMode } = useMainContext();
+  const { baseMusics, refreshBaseMusics } = useMainContext();
 
   // Pegamos o play e setQueue do seu store do player
   const { play, setQueue } = usePlayerStore();
-
-  const toogleTheme = () => setIsDarkMode((prev) => (prev === 0 ? 1 : 0));
 
   const options = useMemo(() => {
     return ["a", "b", "c"].map((a) => ({ label: a, value: a }));

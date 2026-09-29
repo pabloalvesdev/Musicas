@@ -64,7 +64,9 @@ const Section = ({
             shadowRadius: 5,
             elevation: 5,
           },
-          isContained && { backgroundColor: customTheme.colors.bgDark },
+          (isContained || isShadowed) && {
+            backgroundColor: customTheme.colors.bgDark,
+          },
           height != undefined &&
             typeof height === "number" && { height: height },
           height != undefined && typeof height === "string" && { flex: 1 },

@@ -2,6 +2,7 @@
 import { Text } from "@/components";
 import { useTheme } from "@/hooks";
 import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { Dimensions, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -30,7 +31,7 @@ const TabHeader = ({ options }: any) => {
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.navigate("/settings")}>
             <MaterialIcons
               name="settings"
               size={customTheme.iconSizes.md}

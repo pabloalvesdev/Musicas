@@ -131,7 +131,7 @@ const iconSizes = {
 };
 
 const lightTheme: ITheme = {
-  primaryColor: "#88e81a", //"#4D55CC",
+  primaryColor: "#c10020", //"#4D55CC",
   chartColors,
   colors: lightColors,
   fontSizes,
@@ -140,7 +140,7 @@ const lightTheme: ITheme = {
   iconSizes,
 };
 const darkTheme: ITheme = {
-  primaryColor: "#88e81a", //"#4D55CC",
+  primaryColor: "#c10020", //"#4D55CC",
   chartColors,
   colors: darkColors,
   fontSizes,

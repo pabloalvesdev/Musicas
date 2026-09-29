@@ -1,5 +1,10 @@
 import { darkTheme } from "@/constants/theme";
+import IUserPreferences from "@/interfaces/IUserPreferences";
 import { getSavedSongs } from "@/services/files";
+import {
+  getUserPreferences,
+  saveUserPreferences,
+} from "@/services/userPreferences";
 import React, {
   createContext,
   useCallback,
@@ -16,13 +21,13 @@ enum ESwitch {
 
 interface IMainContext {
   isDarkMode: number;
-  setIsDarkMode: React.Dispatch<React.SetStateAction<number>>;
   primaryColor: string;
-  setPrimaryColor: React.Dispatch<React.SetStateAction<string>>;
   // dialog: IDialog
   // setDialog: React.Dispatch<React.SetStateAction<IDialog>>
   // alert: IAlert
   // setAlert: React.Dispatch<React.SetStateAction<IAlert>>
+  userPreferences: IUserPreferences;
+  updateUserPreferences: (newPrefs: Partial<IUserPreferences>) => void;
   load: boolean;
   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
   baseMusics: IMusic[];
@@ -43,6 +48,11 @@ const MainProvider = ({ children }: IProps) => {
   const [baseMusics, setBaseMusics] = useState<IMusic[]>([] as IMusic[]);
 
   const [isDarkMode, setIsDarkMode] = useState<number>(ESwitch.Yes);
+  const [autoPlay, setAutoPlay] = useState<number>(ESwitch.No);
+
+  const [userPreferences, setUserPreferences] = useState<IUserPreferences>(() =>
+    getUserPreferences(),
+  );
   // const [dialog, setDialog] = useState<IDialog>({
   //   show: false,
   // });
@@ -51,10 +61,18 @@ const MainProvider = ({ children }: IProps) => {
   //   text: "",
   //   type: "success",
   // });
+
   const [load, setLoad] = useState(false);
 
-  // refreshes
+  const updateUserPreferences = (newPrefs: Partial<IUserPreferences>) => {
+    const updated = saveUserPreferences(newPrefs);
+    setUserPreferences(updated);
 
+    setIsDarkMode(updated.isDarkMode ? 1 : 0);
+    setAutoPlay(updated.isDarkMode ? 1 : 0);
+    setPrimaryColor(updated.primaryColor);
+  };
+  // refreshes
   const refreshBaseMusics = useCallback(async () => {
     setLoad(true);
     try {
@@ -78,10 +96,11 @@ const MainProvider = ({ children }: IProps) => {
       setLoad,
       baseMusics,
       refreshBaseMusics,
+      userPreferences,
+      updateUserPreferences,
     }),
     [
       isDarkMode,
-      setIsDarkMode,
       primaryColor,
       setPrimaryColor,
       load,

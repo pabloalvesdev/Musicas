@@ -5,16 +5,54 @@ const db = SQLite.openDatabaseSync("library.db");
 
 export const initDatabase = async (): Promise<void> => {
   await db.execAsync(`
+    PRAGMA foreign_keys = ON;
+
+    -- 1. Tabela de Músicas
     CREATE TABLE IF NOT EXISTS songs (
       id TEXT PRIMARY KEY NOT NULL,
-      url TEXT NOT NULL,
       title TEXT NOT NULL,
-      artist TEXT NOT NULL,
-      album TEXT NOT NULL,
-      genre TEXT,
-      duration REAL NOT NULL
+      artist TEXT,
+      album TEXT,
+      genre TEXT DEFAULT 'Desconhecido',
+      url TEXT NOT NULL,
+      duration REAL,
+      isFavorite INTEGER DEFAULT 0
+    );
+
+    -- 2. Tabela de Playlists
+    CREATE TABLE IF NOT EXISTS playlists (
+      id TEXT PRIMARY KEY NOT NULL,
+      name TEXT NOT NULL,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- 3. Tabela de Relacionamento (Músicas <-> Playlists)
+    CREATE TABLE IF NOT EXISTS playlist_songs (
+      playlist_id TEXT NOT NULL,
+      song_id TEXT NOT NULL,
+      PRIMARY KEY (playlist_id, song_id),
+      FOREIGN KEY (playlist_id) REFERENCES playlists(id) ON DELETE CASCADE,
+      FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE
     );
   `);
+
+  // Garante que o campo isFavorite seja adicionado se a tabela 'songs' já existia
+  try {
+    await db.execAsync(
+      "ALTER TABLE songs ADD COLUMN isFavorite INTEGER DEFAULT 0;",
+    );
+  } catch (error) {
+    // Coluna já existe
+  }
+
+  // Garante que o campo genre seja adicionado se a tabela 'songs' já existia
+  try {
+    await db.execAsync(
+      "ALTER TABLE songs ADD COLUMN genre TEXT DEFAULT 'Desconhecido';",
+    );
+  } catch (error) {
+    // Coluna já existe
+  }
 };
 
 export const getSongsFromDB = async (): Promise<IMusic[]> => {
@@ -28,7 +66,7 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
     await db.execAsync("DELETE FROM songs;");
 
     const statement = await db.prepareAsync(
-      "INSERT INTO songs (id, url, title, artist, album, genre, duration) VALUES ($id, $url,$title, $artist,$album, $genre,$duration);",
+      "INSERT INTO songs (id, url, title, artist, album, genre, duration, isFavorite) VALUES ($id,$url, $title,$artist, $album,$genre, $duration,$isFavorite);",
     );
 
     try {
@@ -41,6 +79,7 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
           $album: song.album,
           $genre: song.genre || "Desconhecido",
           $duration: song.duration,
+          $isFavorite: song.isFavorite ? 1 : 0,
         });
       }
     } finally {

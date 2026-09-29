@@ -40,6 +40,7 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
       const uri = await asset.getUri();
       const filename = await asset.getFilename();
       const rawTitle = filename.replace(/\.[^/.]+$/, "");
+      console.log(uri);
 
       let metaTitle = rawTitle;
       let metaArtist = "<Desconhecido>";

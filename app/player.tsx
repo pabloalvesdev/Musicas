@@ -1,7 +1,7 @@
 import { Text as MyText } from "@/components";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
-import { getAudioPlayerInstance } from "@/services/player";
+import { getAudioPlayerInstance, seekAudio } from "@/services/player";
 import { usePlayerStore } from "@/stores/playerStore";
 import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -25,6 +25,9 @@ export default function PlayerScreen() {
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const replay10Sec = () => seekAudio(currentTime - 10);
+  const forward10Sec = () => seekAudio(currentTime + 10);
 
   useEffect(() => {
     const player = getAudioPlayerInstance();
@@ -181,7 +184,7 @@ export default function PlayerScreen() {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={previousSong}>
+        <TouchableOpacity onPress={replay10Sec}>
           <MaterialIcons
             name="replay-10"
             size={32}
@@ -203,7 +206,7 @@ export default function PlayerScreen() {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={previousSong}>
+        <TouchableOpacity onPress={forward10Sec}>
           <MaterialIcons
             name="forward-10"
             size={32}
