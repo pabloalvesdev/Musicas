@@ -240,7 +240,7 @@ export default function PlayerScreen() {
 
       {/* Mais Opcoes */}
       <View style={styles.controlsRow}>
-        <TouchableOpacity onPress={previousSong}>
+        <TouchableOpacity onPress={() => router.push("/player/queue")}>
           <MaterialIcons
             name="playlist-play"
             size={30}

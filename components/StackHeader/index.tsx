@@ -1,12 +1,15 @@
 import { Text } from "@/components";
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { Dimensions, View } from "react-native";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 
 import { useTheme } from "@/hooks";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const StackHeader = ({ options }: NativeStackHeaderProps) => {
+const StackHeader = ({ options }: any) => {
   const { customTheme } = useTheme();
+  const router = useRouter();
+  const canGoBack = router.canGoBack();
   return (
     <SafeAreaView
       style={{
@@ -22,11 +25,28 @@ const StackHeader = ({ options }: NativeStackHeaderProps) => {
           justifyContent: "center",
         }}
       >
-        {options.headerLeft && (
-          <View style={{ position: "absolute", left: customTheme.spacing.md }}>
+        {/* LADO ESQUERDO: Botão Customizado OU Seta de Voltar Automática */}
+        <View style={{ position: "absolute", left: customTheme.spacing.md }}>
+          {options.headerLeft ? (
             <options.headerLeft />
-          </View>
-        )}
+          ) : canGoBack ? (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              style={{
+                padding: 4,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons
+                name="chevron-back"
+                size={26}
+                color={customTheme.colors.textPrimary || "#FFF"}
+              />
+            </TouchableOpacity>
+          ) : null}
+        </View>
         <View>
           <Text size="lg" bold>
             {options.title}
