@@ -16,12 +16,20 @@ const formatTime = (seconds: number) => {
 };
 
 export default function PlayerScreen() {
-  const { primaryColor } = useMainContext();
+  const { primaryColor, userPreferences } = useMainContext();
   const router = useRouter();
   const { customTheme } = useTheme();
 
-  const { currentSong, isPlaying, pause, resume, nextSong, previousSong } =
-    usePlayerStore();
+  const {
+    currentSong,
+    isPlaying,
+    pause,
+    currentIndex,
+    queue,
+    resume,
+    nextSong,
+    previousSong,
+  } = usePlayerStore();
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -44,6 +52,13 @@ export default function PlayerScreen() {
 
           setCurrentTime(current);
           setDuration(total);
+
+          if (
+            status.didJustFinish &&
+            userPreferences.autoPlay &&
+            !(currentIndex + 1 >= queue.length) // NÃO é a ultima
+          )
+            nextSong();
         }
       },
     );

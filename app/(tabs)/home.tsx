@@ -9,7 +9,7 @@ import { TouchableOpacity } from "react-native";
 
 function Home() {
   const { customTheme } = useTheme();
-  const { baseMusics, refreshBaseMusics } = useMainContext();
+  const { allMusics, refreshAllMusics } = useMainContext();
 
   // Pegamos o play e setQueue do seu store do player
   const { play, setQueue } = usePlayerStore();
@@ -21,19 +21,19 @@ function Home() {
   const [item, setItem] = useState("");
 
   useEffect(() => {
-    refreshBaseMusics();
-  }, [refreshBaseMusics]);
+    refreshAllMusics();
+  }, [refreshAllMusics]);
 
   const handleSelectSong = (selectedSong: any) => {
     if (!selectedSong) return;
-    setQueue(baseMusics);
+    setQueue(allMusics);
     play(selectedSong);
   };
 
   return (
     <Wrapper>
       <List
-        data={baseMusics}
+        data={allMusics}
         listItem={(a: any) => (
           <TouchableOpacity onPress={() => handleSelectSong(a.item)}>
             <MusicItem item={a.item} />

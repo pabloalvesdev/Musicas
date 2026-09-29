@@ -13,7 +13,7 @@ export default function Settings() {
     isDarkMode,
     userPreferences,
     updateUserPreferences,
-    refreshBaseMusics,
+    refreshAllMusics,
   } = useMainContext();
   const [autoplay, setAutoplay] = useState(0);
 
@@ -23,7 +23,7 @@ export default function Settings() {
 
   const syncWithDb = async () => {
     const response = await syncLocalSongsWithDB();
-    refreshBaseMusics();
+    refreshAllMusics();
   };
 
   return (

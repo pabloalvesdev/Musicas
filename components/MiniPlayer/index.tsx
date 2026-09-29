@@ -1,3 +1,4 @@
+import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { getAudioPlayerInstance } from "@/services/player";
 import { usePlayerStore } from "@/stores/playerStore";
@@ -15,8 +16,17 @@ import {
 export default function MiniPlayer() {
   const router = useRouter();
   const { customTheme } = useTheme();
+  const { userPreferences } = useMainContext();
 
-  const { currentSong, isPlaying, pause, resume, nextSong } = usePlayerStore();
+  const {
+    currentSong,
+    currentIndex,
+    queue,
+    isPlaying,
+    pause,
+    resume,
+    nextSong,
+  } = usePlayerStore();
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -36,6 +46,13 @@ export default function MiniPlayer() {
 
           setCurrentTime(current);
           setDuration(total);
+
+          if (
+            status.didJustFinish &&
+            userPreferences.autoPlay &&
+            !(currentIndex + 1 >= queue.length) // NÃO é a ultima
+          )
+            nextSong();
         }
       },
     );

@@ -10,21 +10,21 @@ import { TouchableOpacity } from "react-native";
 
 function Favorites() {
   const { customTheme } = useTheme();
-  const { baseMusics, refreshBaseMusics } = useMainContext();
+  const { allMusics, refreshAllMusics } = useMainContext();
   const options = useMemo(() => {
     return ["a", "b", "c"].map((a) => ({ label: a, value: a }));
   }, []);
   const [item, setItem] = useState("");
 
   useEffect(() => {
-    refreshBaseMusics();
-  }, [refreshBaseMusics]);
+    refreshAllMusics();
+  }, [refreshAllMusics]);
 
   return (
     <Wrapper>
       <Section isContained>
         <List
-          data={baseMusics}
+          data={allMusics}
           listItem={(a) => (
             <TouchableOpacity onPress={() => playAudio(a.item.url)}>
               <MusicItem item={a.item} />

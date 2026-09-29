@@ -30,8 +30,8 @@ interface IMainContext {
   updateUserPreferences: (newPrefs: Partial<IUserPreferences>) => void;
   load: boolean;
   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
-  baseMusics: IMusic[];
-  refreshBaseMusics: () => Promise<void>;
+  allMusics: IMusic[];
+  refreshAllMusics: () => Promise<void>;
 }
 
 interface IProps {
@@ -45,7 +45,7 @@ const MainProvider = ({ children }: IProps) => {
     darkTheme.primaryColor,
   );
 
-  const [baseMusics, setBaseMusics] = useState<IMusic[]>([] as IMusic[]);
+  const [allMusics, setAllMusics] = useState<IMusic[]>([] as IMusic[]);
 
   const [isDarkMode, setIsDarkMode] = useState<number>(ESwitch.Yes);
   const [autoPlay, setAutoPlay] = useState<number>(ESwitch.No);
@@ -73,12 +73,12 @@ const MainProvider = ({ children }: IProps) => {
     setPrimaryColor(updated.primaryColor);
   };
   // refreshes
-  const refreshBaseMusics = useCallback(async () => {
+  const refreshAllMusics = useCallback(async () => {
     setLoad(true);
     try {
       const response = await getSavedSongs();
       console.log("📂 Músicas retornadas do SQLite:", response.length);
-      setBaseMusics(response);
+      setAllMusics(response);
     } catch (error) {
       console.error("❌ Erro ao ler SQLite no Context:", error);
     } finally {
@@ -94,8 +94,8 @@ const MainProvider = ({ children }: IProps) => {
       setPrimaryColor,
       load,
       setLoad,
-      baseMusics,
-      refreshBaseMusics,
+      allMusics,
+      refreshAllMusics,
       userPreferences,
       updateUserPreferences,
     }),
@@ -105,8 +105,8 @@ const MainProvider = ({ children }: IProps) => {
       setPrimaryColor,
       load,
       setLoad,
-      baseMusics,
-      refreshBaseMusics,
+      allMusics,
+      refreshAllMusics,
     ],
   );
 

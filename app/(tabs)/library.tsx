@@ -5,10 +5,10 @@ import { FlatList, StyleSheet, View } from "react-native";
 
 const Library = () => {
   const { customTheme } = useTheme();
-  const { baseMusics } = useMainContext();
+  const { allMusics } = useMainContext();
 
-  const artists = [...new Set(baseMusics.map((a) => a.artist))];
-  const genre = [...new Set(baseMusics.map((a) => a.genre))];
+  const artists = [...new Set(allMusics.map((a) => a.artist))];
+  const genre = [...new Set(allMusics.map((a) => a.genre))];
 
   return (
     <Wrapper>
