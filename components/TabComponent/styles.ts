@@ -9,7 +9,7 @@ const localStyles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   stepContainer: {
-    // height: "100%",
+    height: "95%",
     flexDirection: "row",
     width: width * stepCount,
     // flex: 1

@@ -1,12 +1,9 @@
 import { TabComponent, Text, Wrapper } from "@/components";
-import List from "@/components/List";
-import MusicItem from "@/components/MusicItem";
-import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { IMusic } from "@/interfaces";
 import { usePlayerStore } from "@/stores/playerStore";
-import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -29,74 +26,43 @@ const Library = () => {
   return (
     <Wrapper>
       <TabComponent items={["Artistas", "Genero", "Pastas (talvez)"]}>
-        {selectedArtistQueue === null ? (
-          <FlatList
-            style={{ marginTop: 30 }}
-            numColumns={2}
-            data={artists}
-            columnWrapperStyle={{
-              justifyContent: "space-around", // Espaça os 2 cards na linha
-              marginBottom: 16, // Espaço entre as linhas
-            }}
-            renderItem={(a) => (
-              <TouchableOpacity
-                onPress={() =>
-                  setSelectedArtistQueue(
-                    allMusics.filter((t) => a.item === t.artist),
-                  )
-                }
-                style={[
-                  {
-                    borderRadius: customTheme.spacing.lg,
-                    width: "45%",
-                    height: 150,
-                    padding: 10,
-                    backgroundColor: customTheme.colors.bgDark,
-                  },
-                ]}
-              >
-                <Text size="md" bold>
-                  {a.item}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        ) : (
-          <>
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity
-                onPress={() => setSelectedArtistQueue(null)}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                style={{
-                  padding: 4,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Ionicons
-                  name="chevron-back"
-                  size={26}
-                  color={customTheme.colors.textPrimary || "#FFF"}
-                />
-              </TouchableOpacity>
-              <Text size="md">{selectedArtistQueue[0].artist}</Text>
-            </View>
-            <Section isContained>
-              <List
-                data={selectedArtistQueue}
-                listItem={(a: any) => (
-                  <TouchableOpacity onPress={() => handleSelectSong(a.item)}>
-                    <MusicItem item={a.item} />
-                  </TouchableOpacity>
-                )}
-                gap={10}
-              />
-            </Section>
-          </>
-        )}
-
+        {/* Aba de Artistas */}
         <FlatList
-          style={{ marginTop: 30 }}
+          style={{ marginTop: 20 }}
+          numColumns={2}
+          data={artists}
+          columnWrapperStyle={{
+            justifyContent: "space-around", // Espaça os 2 cards na linha
+            marginBottom: 16, // Espaço entre as linhas
+          }}
+          renderItem={(a) => (
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/library/details",
+                  params: { artist: a.item },
+                })
+              }
+              style={[
+                {
+                  borderRadius: customTheme.spacing.lg,
+                  width: "45%",
+                  height: 150,
+                  padding: 10,
+                  backgroundColor: customTheme.colors.bgDark,
+                },
+              ]}
+            >
+              <Text size="md" bold>
+                {a.item}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+
+        {/* Aba de Genero */}
+        <FlatList
+          style={{ marginTop: 20 }}
           numColumns={2}
           data={genre}
           columnWrapperStyle={{
@@ -122,8 +88,9 @@ const Library = () => {
           )}
         />
 
+        {/* Aba que eu ainda nao sei */}
         <FlatList
-          style={{ marginTop: 30 }}
+          style={{ marginTop: 20 }}
           numColumns={2}
           data={["Neutre"]}
           columnWrapperStyle={{
