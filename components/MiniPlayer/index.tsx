@@ -78,7 +78,7 @@ export default function MiniPlayer() {
       style={[
         styles.container,
         {
-          backgroundColor: customTheme.colors.bgDark,
+          backgroundColor: customTheme.colors.bgDefault,
           borderColor: customTheme.colors.bgDark,
         },
       ]}

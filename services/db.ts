@@ -1,6 +1,17 @@
 import { IMusic } from "@/interfaces";
 import * as SQLite from "expo-sqlite";
 
+// Função para reparar acentuação/ç corrompidos pelas tags ID3
+function sanitizeText(text?: string): string {
+  if (!text) return "";
+  try {
+    // Tenta desmancilhar caracteres ISO-8859-1 interpretados como UTF-8
+    return decodeURIComponent(escape(text));
+  } catch {
+    return text; // Se já estiver correto ou falhar o decode, devolve o texto original
+  }
+}
+
 const db = SQLite.openDatabaseSync("library.db");
 
 export const initDatabase = async (): Promise<void> => {
@@ -66,7 +77,7 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
     await db.execAsync("DELETE FROM songs;");
 
     const statement = await db.prepareAsync(
-      "INSERT INTO songs (id, url, title, artist, album, genre, duration, isFavorite) VALUES ($id,$url, $title,$artist, $album,$genre, $duration,$isFavorite);",
+      "INSERT INTO songs (id, url, title, artist, album, genre, duration, isFavorite) VALUES ($id, $url, $title, $artist, $album, $genre, $duration, $isFavorite);",
     );
 
     try {
@@ -74,10 +85,10 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
         await statement.executeAsync({
           $id: song.id,
           $url: song.url,
-          $title: song.title,
-          $artist: song.artist,
-          $album: song.album,
-          $genre: song.genre || "Desconhecido",
+          $title: sanitizeText(song.title),
+          $artist: sanitizeText(song.artist) || "Artista Desconhecido",
+          $album: sanitizeText(song.album) || "Álbum Desconhecido",
+          $genre: sanitizeText(song.genre) || "Desconhecido",
           $duration: song.duration,
           $isFavorite: song.isFavorite ? 1 : 0,
         });

@@ -10,6 +10,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const iconNames: Record<string, string> = {
   home: "home", // Casinha em linhas finas
@@ -44,7 +45,7 @@ const TabBar = ({ navigation, state }: any) => {
   }, [state.index]);
 
   return (
-    <View
+    <SafeAreaView
       style={{
         backgroundColor: customTheme.colors.bgDefault,
       }}
@@ -63,7 +64,6 @@ const TabBar = ({ navigation, state }: any) => {
           style={{
             alignSelf: "center",
             width: "80%",
-            paddingVertical: 10,
             backgroundColor: customTheme.colors.bgDefault,
             borderRadius: 20,
             flexDirection: "row",
@@ -120,7 +120,7 @@ const TabBar = ({ navigation, state }: any) => {
           ))}
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
