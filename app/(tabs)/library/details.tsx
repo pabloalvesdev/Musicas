@@ -1,12 +1,15 @@
 import { Text, Wrapper } from "@/components";
 import List from "@/components/List";
+import MoreOptions from "@/components/MoreOptions";
 import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { usePlayerStore } from "@/stores/playerStore";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import Utils from "@/utils";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
+import { useRef } from "react";
 import * as rn from "react-native";
 
 type Params = {
@@ -19,7 +22,8 @@ const Details = () => {
   const { artist, genre } = useLocalSearchParams<Params>();
   const { allMusics } = useMainContext();
   const { customTheme } = useTheme();
-  const { setQueue, play } = usePlayerStore();
+  const { setQueue, play, queue, currentIndex } = usePlayerStore();
+  const optionsRef = useRef<any>(null);
 
   const data = allMusics.filter(
     (x) =>
@@ -33,46 +37,65 @@ const Details = () => {
     play(selectedSong);
   };
 
-  const tocarDEsordanadatmente = () => {};
-  const tocarEMSEGUIDA = () => {};
+  const shufflePlay = () => {
+    // desordenar a lista
+    var shuffledMusics = Utils.sortMusicList(data, "shuffle");
+    setQueue(shuffledMusics);
+    play(shuffledMusics[0]);
+  };
+
+  const queueNext = () => {
+    if (queue.map((a) => a.id).join(",") === data.map((a) => a.id).join(","))
+      return;
+    queue.splice(currentIndex + 1, 0, ...data);
+    console.log(queue.map((a) => a.title));
+  };
+
+  const appendToQueue = () => {
+    queue.push(...data);
+  };
+
+  const addToPlaylist = () => {};
+
+  const showOptions = () => optionsRef.current?.open();
 
   return (
     <Wrapper>
       <Section>
-        <rn.View style={[styles.row, { justifyContent: "center", gap: 10 }]}>
+        <rn.View style={styles.row}>
           <rn.View style={styles.photo} />
-          <rn.View>
-            <Text size="lg">{artist}</Text>
-            <Text size="sm">{data.length} Músicas</Text>
-            <rn.View style={[styles.row, { justifyContent: "space-between" }]}>
-              <rn.TouchableOpacity onPress={() => {}}>
-                <MaterialIcons
-                  name="playlist-add"
-                  size={30}
-                  color={customTheme.colors.textPrimary}
-                />
-              </rn.TouchableOpacity>
-              <rn.TouchableOpacity onPress={() => {}}>
+          <rn.View style={{ justifyContent: "space-between" }}>
+            <rn.View>
+              <Text size="lg" bold>
+                {artist}
+              </Text>
+              <Text size="sm" color="secondary">
+                {data.length} Músicas
+              </Text>
+            </rn.View>
+            <rn.View style={styles.row}>
+              <rn.TouchableOpacity onPress={shufflePlay}>
                 <Ionicons
                   name="shuffle"
                   size={30}
                   color={customTheme.colors.textPrimary}
                 />
               </rn.TouchableOpacity>
-              <rn.TouchableOpacity onPress={() => {}}>
-                <Ionicons
-                  name="repeat"
-                  size={30}
-                  color={customTheme.colors.textPrimary}
-                />
-              </rn.TouchableOpacity>
-              <rn.TouchableOpacity onPress={() => {}}>
+              <MoreOptions
+                options={[
+                  { label: "Tocar em seguida", onPress: queueNext },
+                  { label: "Adicionar a fila atual", onPress: appendToQueue },
+                  { label: "Adicionar a uma playlist", onPress: addToPlaylist },
+                ]}
+                ref={optionsRef}
+              />
+              {/* <rn.TouchableOpacity onPress={() => {}}>
                 <MaterialIcons
-                  name="playlist-add"
+                  name="add"
                   size={30}
                   color={customTheme.colors.textPrimary}
                 />
-              </rn.TouchableOpacity>
+              </rn.TouchableOpacity> */}
             </rn.View>
           </rn.View>
         </rn.View>
@@ -96,6 +119,7 @@ const Details = () => {
 const styles = rn.StyleSheet.create({
   row: {
     flexDirection: "row",
+    gap: 10,
   },
   photo: {
     width: 100,
@@ -107,3 +131,30 @@ const styles = rn.StyleSheet.create({
 });
 
 export default Details;
+
+{
+  /* <Section>
+  <rn.View
+    style={{ flexDirection: "row", justifyContent: "space-between" }}
+  >
+    <rn.View style={{ flexDirection: "row", gap: 20 }}>
+      <rn.View style={styles.photo} />
+      <rn.View>
+        <Text size="lg" bold>
+          {artist}
+        </Text>
+        <Text size="sm" color="secondary">
+          {data.length} Músicas
+        </Text>
+      </rn.View>
+    </rn.View>
+    <rn.TouchableOpacity>
+      <MaterialIcons
+        name="more-vert"
+        size={30}
+        color={customTheme.colors.textPrimary}
+      />
+    </rn.TouchableOpacity>
+  </rn.View>
+</Section> */
+}

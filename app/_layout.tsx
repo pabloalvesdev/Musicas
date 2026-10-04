@@ -1,4 +1,5 @@
 // app/_layout.tsx
+import { StackHeader } from "@/components";
 import { Stack } from "expo-router";
 import { LogBox } from "react-native";
 import MainProvider from "../context/MainContext";
@@ -21,7 +22,20 @@ export default function RootLayout() {
           }}
         />
 
-        <Stack.Screen name="settings" />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            header: (props) => (
+              <StackHeader
+                back={props.back}
+                navigation={props.navigation}
+                options={props.options}
+                route={props.route}
+              />
+            ),
+          }}
+          name="settings"
+        />
       </Stack>
     </MainProvider>
   );

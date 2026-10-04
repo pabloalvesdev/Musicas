@@ -6,7 +6,7 @@ const PREFERENCES_KEY = "user_preferences";
 export const defaultPreferences: IUserPreferences = {
   autoPlay: true,
   isDarkMode: true,
-  primaryColor: "#A3E635",
+  primaryColor: "#0b5583",
 };
 
 // Ler preferências (síncrono e instantâneo)
