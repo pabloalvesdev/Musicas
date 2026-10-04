@@ -38,12 +38,17 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
 
     for (const asset of assets) {
       const uri = await asset.getUri();
+
+      // FILTRO: Ignora áudios do WhatsApp / fora da pasta /Music/
+      if (!isRealSong(uri)) {
+        continue;
+      }
+
       const filename = await asset.getFilename();
       const rawTitle = filename.replace(/\.[^/.]+$/, "");
-      console.log(uri);
 
       let metaTitle = rawTitle;
-      let metaArtist = "<Desconhecido>";
+      let metaArtist = "Artista Desconhecido";
       let metaAlbum = "Sem Álbum";
       let metaGenre = "Desconhecido";
       let metaDuration = 0;
@@ -69,15 +74,15 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
       formattedSongs.push({
         id: String(asset.id),
         url: String(uri),
-        title: metaTitle,
-        artist: metaArtist,
-        album: metaAlbum,
-        genre: metaGenre,
+        title: sanitizeText(metaTitle),
+        artist: sanitizeText(metaArtist),
+        album: sanitizeText(metaAlbum),
+        genre: sanitizeText(metaGenre),
         duration: metaDuration,
       });
     }
 
-    // Grava tudo no SQLite de uma vez só
+    // Grava apenas as músicas limpas no SQLite
     await saveSongsToDB(formattedSongs);
     console.log(
       `💾 ${formattedSongs.length} músicas com metadados salvas no SQLite`,
@@ -88,4 +93,34 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
     console.error("❌ Erro ao sincronizar acervo:", error);
     return [];
   }
+}
+
+// Função auxiliar para reparar a acentuação e 'ç'
+function sanitizeText(text?: string): string {
+  if (!text) return "";
+  try {
+    return decodeURIComponent(escape(text));
+  } catch {
+    return text;
+  }
+}
+
+// Função auxiliar para validar se é uma música real
+function isRealSong(uri: string, durationInMs?: number): boolean {
+  // 1. Ignora caminhos do WhatsApp, Telegram ou pacotes de mensagens
+  const isMessengerAudio =
+    uri.includes("com.whatsapp") ||
+    uri.includes("WhatsApp") ||
+    uri.includes("Telegram");
+
+  // 2. Ignora arquivos .opus
+  const isOpus = uri.toLowerCase().endsWith(".opus");
+
+  // 3. Garante que está dentro do diretório /Music/
+  const isInMusicFolder = uri.includes("/Music/");
+
+  // 4. Ignora áudios com menos de 20 segundos (ex: vinhetas ou notas de voz)
+  const isTooShort = durationInMs ? durationInMs < 20000 : false;
+
+  return isInMusicFolder && !isMessengerAudio && !isOpus && !isTooShort;
 }

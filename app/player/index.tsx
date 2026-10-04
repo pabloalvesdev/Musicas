@@ -137,7 +137,7 @@ export default function PlayerScreen() {
 
       {/* Título e Artista */}
       <View style={styles.infoContainer}>
-        <View>
+        <View style={{ flex: 1 }}>
           <MyText size="lg" bold>
             {currentSong.title}
           </MyText>
