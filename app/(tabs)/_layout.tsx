@@ -23,7 +23,7 @@ export default function AppTabsLayout() {
         header: (props) => <TabHeader options={props.options} />,
       }}
     >
-      <Tabs.Screen name="home" options={{ title: "Início" }} />
+      <Tabs.Screen name="home" options={{ title: "Músicas" }} />
       <Tabs.Screen name="library" options={{ headerShown: false }} />
       <Tabs.Screen name="favorites" options={{ title: "Meus Favoritos" }} />
       <Tabs.Screen name="settings" options={{ title: "Configurações" }} />

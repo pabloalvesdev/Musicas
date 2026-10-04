@@ -6,6 +6,7 @@ import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -104,15 +105,22 @@ export default function MiniPlayer() {
             { backgroundColor: customTheme.colors.bgDefault },
           ]}
         >
-          <Feather
-            name="music"
-            size={20}
-            color={
-              currentSong
-                ? customTheme.primaryColor
-                : customTheme.colors.textSecondary
-            }
-          />
+          {currentSong && currentSong.img !== undefined ? (
+            <Image
+              source={{ uri: `data:image/png;base64,${currentSong.img}` }}
+              style={{ width: "100%", height: "100%" }}
+            />
+          ) : (
+            <Feather
+              name="music"
+              size={20}
+              color={
+                currentSong
+                  ? customTheme.primaryColor
+                  : customTheme.colors.textSecondary
+              }
+            />
+          )}
         </View>
 
         {/* 3. Título e Artista (Com estado Padrão) */}

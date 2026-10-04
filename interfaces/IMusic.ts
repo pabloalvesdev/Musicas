@@ -7,6 +7,7 @@ export interface IMusic {
   genre?: string;
   isFavorite?: boolean;
   duration: number;
+  img?: string;
 }
 
 export default IMusic;

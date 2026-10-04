@@ -6,7 +6,7 @@ import { usePlayerStore } from "@/stores/playerStore";
 import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const formatTime = (seconds: number) => {
   if (!seconds || isNaN(seconds)) return "00:00";
@@ -132,7 +132,14 @@ export default function PlayerScreen() {
           { backgroundColor: customTheme.colors.bgDark },
         ]}
       >
-        <Feather name="disc" size={140} color={customTheme.primaryColor} />
+        {currentSong.img !== undefined ? (
+          <Image
+            source={{ uri: `data:image/png;base64,${currentSong.img}` }}
+            style={{ width: "100%", height: "100%", borderRadius: 20 }}
+          />
+        ) : (
+          <Feather name="disc" size={140} color={customTheme.primaryColor} />
+        )}
       </View>
 
       {/* Título e Artista */}

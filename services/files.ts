@@ -51,17 +51,18 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
       let metaArtist = "Artista Desconhecido";
       let metaAlbum = "Sem Álbum";
       let metaGenre = "Desconhecido";
+      let metaArt = "";
       let metaDuration = 0;
 
       // Chama seu módulo nativo Kotlin
       try {
         const metadata = await AudioMetadata.getMetadata(uri);
-
         if (metadata) {
           if (metadata.title?.trim()) metaTitle = metadata.title.trim();
           if (metadata.artist?.trim()) metaArtist = metadata.artist.trim();
           if (metadata.album?.trim()) metaAlbum = metadata.album.trim();
           if (metadata.genre?.trim()) metaGenre = metadata.genre.trim();
+          if (metadata.artwork?.trim()) metaArt = metadata.artwork.trim();
           if (metadata.duration) metaDuration = metadata.duration;
         }
       } catch (err) {
@@ -79,6 +80,7 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
         album: sanitizeText(metaAlbum),
         genre: sanitizeText(metaGenre),
         duration: metaDuration,
+        img: metaArt,
       });
     }
 

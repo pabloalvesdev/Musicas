@@ -70,7 +70,13 @@ const Library = () => {
             marginBottom: 16, // Espaço entre as linhas
           }}
           renderItem={(a) => (
-            <View
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/library/details",
+                  params: { genre: a.item },
+                })
+              }
               style={[
                 {
                   borderRadius: customTheme.spacing.lg,
@@ -84,7 +90,7 @@ const Library = () => {
               <Text size="md" bold>
                 {a.item}
               </Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
 

@@ -78,7 +78,7 @@ class AudioMetadataModule : Module() {
           "year" to year,
           "trackNumber" to trackNumber,
           "discNumber" to discNumber,
-        
+          "artwork" to artwork
         )
       } finally {
         retriever.release()

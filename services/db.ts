@@ -24,6 +24,7 @@ export const initDatabase = async (): Promise<void> => {
       title TEXT NOT NULL,
       artist TEXT,
       album TEXT,
+      img TEXT,
       genre TEXT DEFAULT 'Desconhecido',
       url TEXT NOT NULL,
       duration REAL,
@@ -64,6 +65,12 @@ export const initDatabase = async (): Promise<void> => {
   } catch (error) {
     // Coluna já existe
   }
+
+  try {
+    await db.execAsync("ALTER TABLE songs ADD COLUMN img TEXT;");
+  } catch (error) {
+    // Coluna já existe
+  }
 };
 
 export const getSongsFromDB = async (): Promise<IMusic[]> => {
@@ -77,7 +84,7 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
     await db.execAsync("DELETE FROM songs;");
 
     const statement = await db.prepareAsync(
-      "INSERT INTO songs (id, url, title, artist, album, genre, duration, isFavorite) VALUES ($id, $url, $title, $artist, $album, $genre, $duration, $isFavorite);",
+      "INSERT INTO songs (id, url, title, artist, album, genre, duration, isFavorite, img) VALUES ($id, $url, $title, $artist, $album, $genre, $duration, $isFavorite, $img);",
     );
 
     try {
@@ -91,6 +98,7 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
           $genre: sanitizeText(song.genre) || "Desconhecido",
           $duration: song.duration,
           $isFavorite: song.isFavorite ? 1 : 0,
+          $img: sanitizeText(song.img) || "",
         });
       }
     } finally {
