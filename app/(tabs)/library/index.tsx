@@ -1,4 +1,5 @@
 import { TabComponent, Text, Wrapper } from "@/components";
+import LibraryCardItem from "@/components/LibraryCardItem";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { IMusic } from "@/interfaces";
@@ -35,29 +36,7 @@ const Library = () => {
             justifyContent: "space-around", // Espaça os 2 cards na linha
             marginBottom: 16, // Espaço entre as linhas
           }}
-          renderItem={(a) => (
-            <TouchableOpacity
-              onPress={() =>
-                router.push({
-                  pathname: "/library/details",
-                  params: { artist: a.item },
-                })
-              }
-              style={[
-                {
-                  borderRadius: customTheme.spacing.lg,
-                  width: "45%",
-                  height: 150,
-                  padding: 10,
-                  backgroundColor: customTheme.colors.bgDark,
-                },
-              ]}
-            >
-              <Text size="md" bold>
-                {a.item}
-              </Text>
-            </TouchableOpacity>
-          )}
+          renderItem={(a) => <LibraryCardItem identifier={a.item} />}
         />
 
         {/* Aba de Genero */}
@@ -89,6 +68,9 @@ const Library = () => {
             >
               <Text size="md" bold>
                 {a.item}
+              </Text>
+              <Text color="secondary" size="xs">
+                14 Musicas
               </Text>
             </TouchableOpacity>
           )}
