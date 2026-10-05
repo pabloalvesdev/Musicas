@@ -61,6 +61,7 @@ interface IProps {
   size: "xxl" | "xl" | "lg" | "md" | "sm" | "xs" | "xxs";
   bold?: boolean;
   opaque?: boolean;
+  numberOfLines?: number;
   color?:
     | "primary"
     | "secondary"
@@ -73,7 +74,15 @@ interface IProps {
   propTheme?: ITheme;
 }
 
-const Text = ({ children, size, bold, opaque, color, propTheme }: IProps) => {
+const Text = ({
+  children,
+  size,
+  bold,
+  opaque,
+  color,
+  propTheme,
+  numberOfLines,
+}: IProps) => {
   const { customTheme } = useTheme();
   const { primaryColor } = useMainContext();
 
@@ -103,6 +112,7 @@ const Text = ({ children, size, bold, opaque, color, propTheme }: IProps) => {
 
   return (
     <rn.Text
+      numberOfLines={numberOfLines}
       style={[
         styles.base,
         {

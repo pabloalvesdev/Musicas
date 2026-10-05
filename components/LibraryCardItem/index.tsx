@@ -40,6 +40,7 @@ const LibraryCardItem = ({ identifier }: Props) => {
           flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
+          flexWrap: "wrap",
           backgroundColor: customTheme.colors.bgDefault,
         }}
       >
@@ -49,61 +50,43 @@ const LibraryCardItem = ({ identifier }: Props) => {
               uri: `data:image/png;base64,${items[0].img}`,
             }}
             style={{
-              backgroundColor: "red",
               width: "100%",
               height: "100%",
             }}
           />
         ) : numItems === 2 ? (
           <>
-            <Image
-              source={{
-                uri: `data:image/png;base64,${items[0].img}`,
-              }}
-              style={{
-                backgroundColor: "red",
-                width: "45%",
-                height: "100%",
-              }}
-            />
-            <Image
-              source={{
-                uri: `data:image/png;base64,${items[1].img}`,
-              }} // parei nesse componente aqui
-              style={{
-                backgroundColor: "red",
-                width: "45%",
-                height: "100%",
-              }}
-            />
+            {items.slice(0, 2).map((it) => (
+              <Image
+                source={{
+                  uri: `data:image/png;base64,${it.img}`,
+                }}
+                style={{
+                  width: "49.7%",
+                  height: "50%",
+                }}
+              />
+            ))}
           </>
         ) : (
-          <></>
+          <>
+            {items.slice(0, 3).map((it) => (
+              <Image
+                source={{
+                  uri: `data:image/png;base64,${it.img}`,
+                }}
+                style={{
+                  width: "49.7%",
+                  height: "50%",
+                }}
+              />
+            ))}
+          </>
         )}
-        {/* <FlatList
-          numColumns={2}
-          columnWrapperStyle={{
-            justifyContent: "space-around", // Espaça os 2 cards na linha
-            marginBottom: 16, // Espaço entre as linhas
-          }}
-          data={Array.from({ length: numItems }).map((_, index) => index)}
-          renderItem={(rt) => (
-            <Image
-              source={{
-                uri: `data:image/png;base64,${items[rt.item].img}`,
-              }}
-              style={{
-                backgroundColor: "red",
-                width: widthImg,
-                height: heightImg,
-              }}
-            />
-          )}
-        /> */}
       </View>
 
       <View>
-        <Text size="md" bold>
+        <Text size="md" numberOfLines={1} bold>
           {identifier}
         </Text>
         <Text color="secondary" size="xs">
