@@ -1,10 +1,12 @@
 import { Text, Wrapper } from "@/components";
 import List from "@/components/List";
 import MoreOptions from "@/components/MoreOptions";
+import Mural from "@/components/Mural";
 import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
+import { ITheme } from "@/interfaces";
 import { usePlayerStore } from "@/stores/playerStore";
 import Utils from "@/utils";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,6 +24,7 @@ const Details = () => {
   const { artist, genre } = useLocalSearchParams<Params>();
   const { allMusics } = useMainContext();
   const { customTheme } = useTheme();
+  const styles = getStyles(customTheme);
   const { setQueue, play, queue, currentIndex } = usePlayerStore();
   const optionsRef = useRef<any>(null);
 
@@ -60,47 +63,48 @@ const Details = () => {
   const showOptions = () => optionsRef.current?.open();
 
   return (
-    <Wrapper>
+    <Wrapper cStyle={{ justifyContent: "flex-end" }} noPadding>
       <Section>
-        <rn.View style={styles.row}>
-          <rn.View style={styles.photo} />
-          <rn.View style={{ justifyContent: "space-between" }}>
-            <rn.View>
-              <Text size="lg" bold>
-                {artist}
-              </Text>
-              <Text size="sm" color="secondary">
-                {data.length} Músicas
-              </Text>
-            </rn.View>
-            <rn.View style={styles.row}>
-              <rn.TouchableOpacity onPress={shufflePlay}>
-                <Ionicons
-                  name="shuffle"
-                  size={30}
-                  color={customTheme.colors.textPrimary}
-                />
-              </rn.TouchableOpacity>
-              <MoreOptions
-                options={[
-                  { label: "Tocar em seguida", onPress: queueNext },
-                  { label: "Adicionar a fila atual", onPress: appendToQueue },
-                  { label: "Adicionar a uma playlist", onPress: addToPlaylist },
-                ]}
-                ref={optionsRef}
-              />
-              {/* <rn.TouchableOpacity onPress={() => {}}>
-                <MaterialIcons
-                  name="add"
-                  size={30}
-                  color={customTheme.colors.textPrimary}
-                />
-              </rn.TouchableOpacity> */}
-            </rn.View>
-          </rn.View>
+        <rn.View style={styles.photo}>
+          <Mural list={data} />
+        </rn.View>
+        <rn.View
+          style={{
+            padding: customTheme.spacing.md,
+          }}
+        >
+          <Text size="lg" bold>
+            {artist}
+          </Text>
+          <Text size="sm" color="secondary">
+            {data.length} Músicas
+          </Text>
         </rn.View>
       </Section>
-      <Section height={height * 0.6} isContained>
+      <rn.View style={styles.listContainer}>
+        <rn.View style={styles.listButtonsContainer}>
+          <rn.TouchableOpacity
+            style={styles.listActionButton}
+            onPress={shufflePlay}
+          >
+            <Ionicons
+              name="shuffle"
+              size={30}
+              color={customTheme.colors.textPrimary}
+            />
+          </rn.TouchableOpacity>
+
+          <rn.View style={styles.listActionButton}>
+            <MoreOptions
+              options={[
+                { label: "Tocar em seguida", onPress: queueNext },
+                { label: "Adicionar a fila atual", onPress: appendToQueue },
+                { label: "Adicionar a uma playlist", onPress: addToPlaylist },
+              ]}
+              ref={optionsRef}
+            />
+          </rn.View>
+        </rn.View>
         <List
           data={data}
           listItem={(a) => (
@@ -109,26 +113,52 @@ const Details = () => {
             </rn.TouchableOpacity>
           )}
         />
-      </Section>
+      </rn.View>
     </Wrapper>
   );
   //   if (artist) {
   //   } else return null;
 };
 
-const styles = rn.StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 20,
-    borderWidth: 2,
-    backgroundColor: "black",
-  },
-});
+const getStyles = (baseTheme: ITheme) => {
+  return rn.StyleSheet.create({
+    row: {
+      flexDirection: "row",
+      gap: 10,
+    },
+    listContainer: {
+      height: "60%",
+      width: "100%",
+      padding: baseTheme.spacing.xl,
+      backgroundColor: baseTheme.colors.bgDark,
+      borderTopRightRadius: 60,
+      borderTopLeftRadius: 60,
+    },
+    listActionButton: {
+      backgroundColor: baseTheme.primaryColor,
+      width: baseTheme.iconSizes.lg * 1.2,
+      height: baseTheme.iconSizes.lg * 1.2,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: baseTheme.radius.full,
+    },
+    listButtonsContainer: {
+      position: "absolute",
+      right: "10%",
+      top: "-3%",
+      flexDirection: "row",
+      gap: baseTheme.spacing.sm,
+    },
+    photo: {
+      alignSelf: "center",
+      width: 150,
+      height: 150,
+      borderRadius: 20,
+      borderWidth: 2,
+      backgroundColor: "black",
+    },
+  });
+};
 
 export default Details;
 

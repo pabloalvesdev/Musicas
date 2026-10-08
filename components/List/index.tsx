@@ -39,6 +39,7 @@ function List<T>({
   else
     return (
       <FlatList
+        showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         horizontal={horizontal}
         ItemSeparatorComponent={() =>

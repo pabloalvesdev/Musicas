@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Iniciar Waydroid",
+      "type": "shell",
+      "command": "waydroid",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*" // <--- Um padrão genérico para "enganar" o VS Code e ele seguir em frente
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*"
+        }
+      }
+    },
+    {
+      "label": "Run on waydroid",
+      "type": "shell",
+      "command": "sleep 10 && adb connect 192.168.240.112:5555 && npx expo run:android",
+      "dependsOn": "1. Iniciar Waydroid",
+      "problemMatcher": []
+    }
+  ]
+}

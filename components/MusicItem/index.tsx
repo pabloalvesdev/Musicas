@@ -4,9 +4,9 @@ import { IMusic } from "@/interfaces";
 import { usePlayerStore } from "@/stores/playerStore";
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import Text from "../Text";
-import styles from "./styles";
+import getStyles from "./styles";
 
 interface Props {
   item: IMusic;
@@ -21,6 +21,7 @@ const FRAMES: Array<keyof typeof Feather.glyphMap> = [
 const MusicItem = ({ item }: Props) => {
   const { currentSong } = usePlayerStore();
   const { customTheme } = useTheme();
+  const styles = getStyles(customTheme);
   const { primaryColor } = useMainContext();
   const [frameIndex, setFrameIndex] = useState(0);
 
@@ -40,13 +41,41 @@ const MusicItem = ({ item }: Props) => {
 
   return (
     <View style={[styles.card]}>
-      <View style={{ flex: 1 }}>
-        <Text color={isPlaying ? "primary" : "default"} size="md" bold>
-          {item.title}
-        </Text>
-        <Text size="sm" color="secondary">
-          {item.artist}
-        </Text>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          gap: customTheme.spacing.sm,
+          alignItems: "flex-start",
+        }}
+      >
+        <View
+          style={[
+            styles.coverPlaceholder,
+            { backgroundColor: customTheme.colors.bgDefault },
+          ]}
+        >
+          {item.img !== undefined ? (
+            <Image
+              source={{ uri: `data:image/png;base64,${item.img}` }}
+              style={{ width: "100%", height: "100%" }}
+            />
+          ) : (
+            <Feather
+              name="music"
+              size={20}
+              color={customTheme.colors.textSecondary}
+            />
+          )}
+        </View>
+        <View>
+          <Text color={isPlaying ? "primary" : "default"} size="md" bold>
+            {item.title}
+          </Text>
+          <Text size="sm" color="secondary">
+            {item.artist}
+          </Text>
+        </View>
       </View>
       {isPlaying && (
         <View

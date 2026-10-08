@@ -1,7 +1,8 @@
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { router } from "expo-router";
-import { Image, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import Mural from "../Mural";
 import Text from "../Text";
 
 interface Props {
@@ -35,56 +36,7 @@ const LibraryCardItem = ({ identifier }: Props) => {
         },
       ]}
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          backgroundColor: customTheme.colors.bgDefault,
-        }}
-      >
-        {numItems === 1 ? (
-          <Image
-            source={{
-              uri: `data:image/png;base64,${items[0].img}`,
-            }}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        ) : numItems === 2 ? (
-          <>
-            {items.slice(0, 2).map((it) => (
-              <Image
-                source={{
-                  uri: `data:image/png;base64,${it.img}`,
-                }}
-                style={{
-                  width: "49.7%",
-                  height: "50%",
-                }}
-              />
-            ))}
-          </>
-        ) : (
-          <>
-            {items.slice(0, 3).map((it) => (
-              <Image
-                source={{
-                  uri: `data:image/png;base64,${it.img}`,
-                }}
-                style={{
-                  width: "49.7%",
-                  height: "50%",
-                }}
-              />
-            ))}
-          </>
-        )}
-      </View>
-
+      <Mural list={items} />
       <View>
         <Text size="md" numberOfLines={1} bold>
           {identifier}
