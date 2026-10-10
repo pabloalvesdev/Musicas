@@ -4,11 +4,12 @@ import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
-import { playAudio } from "@/services/player";
 import { useEffect, useMemo, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 function Favorites() {
+  const { height } = useWindowDimensions();
+  const cardHeight = height * 0.2;
   const { customTheme } = useTheme();
   const { allMusics, refreshAllMusics } = useMainContext();
   const options = useMemo(() => {
@@ -16,21 +17,45 @@ function Favorites() {
   }, []);
   const [item, setItem] = useState("");
 
+  const checkedAsFavorite = useMemo(
+    () => allMusics.filter((m) => m.isFavorite === true),
+    [allMusics],
+  );
+
+  const mostPlayed = useMemo(() => allMusics.slice(10, 16), [allMusics]);
+
   useEffect(() => {
     refreshAllMusics();
   }, [refreshAllMusics]);
 
   return (
     <Wrapper>
-      <Section isContained>
+      <Section
+        height={cardHeight}
+        header={{
+          title: "Marcados Como Gostei",
+          inside: true,
+        }}
+        isContained
+      >
         <List
-          data={allMusics}
-          listItem={(a) => (
-            <TouchableOpacity onPress={() => playAudio(a.item.url)}>
-              <MusicItem item={a.item} />
-            </TouchableOpacity>
-          )}
-          gap={10}
+          horizontal
+          data={checkedAsFavorite}
+          listItem={(li) => <MusicItem item={li.item} />}
+        />
+      </Section>
+
+      <Section
+        header={{
+          title: "Mais Tocadas",
+          inside: true,
+        }}
+        isContained
+      >
+        <List
+          horizontal
+          data={mostPlayed}
+          listItem={(li) => <MusicItem item={li.item} />}
         />
       </Section>
     </Wrapper>

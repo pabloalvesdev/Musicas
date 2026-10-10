@@ -47,7 +47,7 @@ const MainProvider = ({ children }: IProps) => {
 
   const [allMusics, setAllMusics] = useState<IMusic[]>([] as IMusic[]);
 
-  const [isDarkMode, setIsDarkMode] = useState<number>(ESwitch.Yes);
+  const [isDarkMode, setIsDarkMode] = useState<number>(ESwitch.No);
   const [autoPlay, setAutoPlay] = useState<number>(ESwitch.No);
 
   const [userPreferences, setUserPreferences] = useState<IUserPreferences>(() =>
