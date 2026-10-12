@@ -22,6 +22,7 @@ const Mural = ({ list }: Props) => {
       >
         {numItems === 1 ? (
           <Image
+            key={list[0].id}
             source={{
               uri: `data:image/png;base64,${list[0].img}`,
             }}
@@ -34,6 +35,7 @@ const Mural = ({ list }: Props) => {
           <>
             {list.slice(0, 2).map((it) => (
               <Image
+                key={it.id}
                 source={{
                   uri: `data:image/png;base64,${it.img}`,
                 }}
@@ -48,6 +50,7 @@ const Mural = ({ list }: Props) => {
           <>
             {list.slice(0, 4).map((it) => (
               <Image
+                key={it.id}
                 source={{
                   uri: `data:image/png;base64,${it.img}`,
                 }}

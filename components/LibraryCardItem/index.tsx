@@ -16,9 +16,11 @@ const LibraryCardItem = ({ identifier }: Props) => {
   const numItems = items.length <= 4 ? items.length : 4;
   const widthImg = numItems === 1 ? 100 : 50;
   const heightImg = numItems <= 2 ? 100 : 20;
+  const componentKey = `${identifier}`;
 
   return (
     <TouchableOpacity
+      key={componentKey}
       onPress={() =>
         router.push({
           pathname: "/library/details",
