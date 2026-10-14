@@ -1,4 +1,4 @@
-import { IMusic } from "@/interfaces";
+import { IMusic, IPlaylist } from "@/interfaces";
 import * as SQLite from "expo-sqlite";
 
 // Função para reparar acentuação/ç corrompidos pelas tags ID3
@@ -105,4 +105,10 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
       await statement.finalizeAsync();
     }
   });
+};
+
+export const getPlaylistsFromDB = async (): Promise<IPlaylist[]> => {
+  return await db.getAllAsync<IPlaylist>(
+    "SELECT * FROM playlists ORDER BY title ASC;",
+  );
 };

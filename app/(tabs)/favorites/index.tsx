@@ -1,17 +1,20 @@
-import { Wrapper } from "@/components";
+import { Text, Wrapper } from "@/components";
 import List from "@/components/List";
 import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { TouchableOpacity, useWindowDimensions } from "react-native";
 
 function Favorites() {
   const { height } = useWindowDimensions();
   const cardHeight = height * 0.2;
   const { customTheme } = useTheme();
-  const { allMusics, refreshAllMusics } = useMainContext();
+  const { allMusics, refreshAllMusics, refreshPlaylists, playlists } =
+    useMainContext();
   const options = useMemo(() => {
     return ["a", "b", "c"].map((a) => ({ label: a, value: a }));
   }, []);
@@ -29,7 +32,21 @@ function Favorites() {
   }, [refreshAllMusics]);
 
   return (
-    <Wrapper>
+    <Wrapper scroll>
+      <Section
+        header={{
+          title: "Mais Tocadas",
+          inside: true,
+        }}
+        isContained
+      >
+        <List
+          horizontal
+          data={mostPlayed}
+          listItem={(li) => <MusicItem item={li.item} />}
+        />
+      </Section>
+
       <Section
         height={cardHeight}
         header={{
@@ -47,15 +64,25 @@ function Favorites() {
 
       <Section
         header={{
-          title: "Mais Tocadas",
-          inside: true,
+          inside: false,
+          title: "Playlists",
+          right: (
+            <TouchableOpacity>
+              <Ionicons name="add" size={customTheme.iconSizes.md} />
+            </TouchableOpacity>
+          ),
         }}
-        isContained
       >
         <List
-          horizontal
-          data={mostPlayed}
-          listItem={(li) => <MusicItem item={li.item} />}
+          noData={{ text: "Nenhuma playlist ainda" }}
+          data={playlists}
+          listItem={(li) => (
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/favorites/playlist")}
+            >
+              <Text size="md">{li.item.name}</Text>
+            </TouchableOpacity>
+          )}
         />
       </Section>
     </Wrapper>

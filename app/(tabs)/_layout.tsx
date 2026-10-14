@@ -25,7 +25,7 @@ export default function AppTabsLayout() {
     >
       <Tabs.Screen name="home" options={{ title: "Músicas" }} />
       <Tabs.Screen name="library" options={{ headerShown: false }} />
-      <Tabs.Screen name="favorites" options={{ title: "Meus Favoritos" }} />
+      <Tabs.Screen name="favorites" options={{ headerShown: false }} />
       <Tabs.Screen name="settings" options={{ title: "Configurações" }} />
     </Tabs>
   );

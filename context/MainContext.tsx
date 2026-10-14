@@ -1,5 +1,6 @@
 import { darkTheme } from "@/constants/theme";
 import IUserPreferences from "@/interfaces/IUserPreferences";
+import { getPlaylistsFromDB } from "@/services/db";
 import { getSavedSongs } from "@/services/files";
 import {
   getUserPreferences,
@@ -12,7 +13,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { IMusic } from "../interfaces";
+import { IMusic, IPlaylist } from "../interfaces";
 
 enum ESwitch {
   No,
@@ -32,6 +33,8 @@ interface IMainContext {
   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
   allMusics: IMusic[];
   refreshAllMusics: () => Promise<void>;
+  playlists: IPlaylist[];
+  refreshPlaylists: () => Promise<void>;
 }
 
 interface IProps {
@@ -46,6 +49,7 @@ const MainProvider = ({ children }: IProps) => {
   );
 
   const [allMusics, setAllMusics] = useState<IMusic[]>([] as IMusic[]);
+  const [playlists, setPlaylists] = useState<IPlaylist[]>([] as IPlaylist[]);
 
   const [isDarkMode, setIsDarkMode] = useState<number>(ESwitch.No);
   const [autoPlay, setAutoPlay] = useState<number>(ESwitch.No);
@@ -86,6 +90,19 @@ const MainProvider = ({ children }: IProps) => {
     }
   }, []);
 
+  const refreshPlaylists = useCallback(async () => {
+    setLoad(true);
+    try {
+      const response = await getPlaylistsFromDB();
+      console.log("📂 Músicas retornadas do SQLite:", response.length);
+      setPlaylists(response);
+    } catch (error) {
+      console.error("❌ Erro ao ler SQLite no Context:", error);
+    } finally {
+      setLoad(false);
+    }
+  }, []);
+
   const values = useMemo<IMainContext>(
     () => ({
       isDarkMode,
@@ -96,6 +113,8 @@ const MainProvider = ({ children }: IProps) => {
       setLoad,
       allMusics,
       refreshAllMusics,
+      playlists,
+      refreshPlaylists,
       userPreferences,
       updateUserPreferences,
     }),
