@@ -1,7 +1,7 @@
 import { darkTheme } from "@/constants/theme";
 import IUserPreferences from "@/interfaces/IUserPreferences";
-import { getPlaylistsFromDB } from "@/services/db";
 import { getSavedSongs } from "@/services/files";
+import { getPlaylists } from "@/services/playlists";
 import {
   getUserPreferences,
   saveUserPreferences,
@@ -93,8 +93,8 @@ const MainProvider = ({ children }: IProps) => {
   const refreshPlaylists = useCallback(async () => {
     setLoad(true);
     try {
-      const response = await getPlaylistsFromDB();
-      console.log("📂 Músicas retornadas do SQLite:", response.length);
+      const response = await getPlaylists();
+      console.log("📂 Playlists retornadas do SQLite:", response.length);
       setPlaylists(response);
     } catch (error) {
       console.error("❌ Erro ao ler SQLite no Context:", error);
