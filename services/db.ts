@@ -1,5 +1,6 @@
 import { IMusic, IPlaylist } from "@/interfaces";
 import IPlaylistCreate from "@/interfaces/IPlaylistCreate";
+import { randomUUID } from "expo-crypto";
 import * as SQLite from "expo-sqlite";
 
 // Função para reparar acentuação/ç corrompidos pelas tags ID3
@@ -110,23 +111,21 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
 
 export const getPlaylistsFromDB = async (): Promise<IPlaylist[]> => {
   return await db.getAllAsync<IPlaylist>(
-    "SELECT * FROM playlists ORDER BY title ASC;",
+    "SELECT * FROM playlists ORDER BY name ASC;",
   );
 };
 
 export const createPlaylistToDB = async (
   payload: IPlaylistCreate,
 ): Promise<IPlaylist> => {
-  let newPlaylistId: number = 0;
+  const newPlaylistId = randomUUID();
+  await db.runAsync("INSERT INTO playlists (id, name) VALUES (?, ?)", [
+    newPlaylistId,
+    payload.name,
+  ]);
 
   await db.withTransactionAsync(async () => {
     // 1. Insere a playlist e pega o ID gerado
-    const createdPlaylist = await db.runAsync(
-      "INSERT INTO playlist (name) VALUES (?)",
-      [payload.name],
-    );
-
-    newPlaylistId = createdPlaylist.lastInsertRowId;
 
     // 2. Prepara a statement para inserir as relações com as músicas
     const statement = await db.prepareAsync(

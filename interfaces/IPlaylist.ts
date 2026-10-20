@@ -1,7 +1,7 @@
 import IMusic from "./IMusic";
 
 export interface IPlaylist {
-  id: number;
+  id: string;
   name: string;
   musics: IMusic[];
 }

@@ -17,9 +17,9 @@ export async function createPlaylist(payload: IPlaylistCreate) {
     await initDatabase();
     const result = await createPlaylistToDB(payload);
     console.log(`💾 playlist [${result.id}]${result.name} salva no SQLite`);
+    return result;
   } catch (error) {
     console.error("❌ Erro ao buscar playlists do SQLite:", error);
-    return [];
   }
 }
 // export async function syncLocalSongsWithDB(): Promise<IPlaylist[]> {

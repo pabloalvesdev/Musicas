@@ -1,64 +1,53 @@
 import { Text, Wrapper } from "@/components";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
-import { ITheme } from "@/interfaces";
+import { IPlaylist, ITheme } from "@/interfaces";
 import { usePlayerStore } from "@/stores/playerStore";
-import Utils from "@/utils";
-import { useLocalSearchParams } from "expo-router";
-import { useRef } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useEffect, useMemo, useRef } from "react";
 import * as rn from "react-native";
 
 type Params = {
-  artist?: string;
-  genre?: string;
+  id: string;
 };
 
 const Playlist = () => {
   const { height } = rn.useWindowDimensions();
-  const { artist, genre } = useLocalSearchParams<Params>();
-  const { allMusics } = useMainContext();
+  const { id } = useLocalSearchParams<Params>();
+  const { playlists } = useMainContext();
   const { customTheme } = useTheme();
   const styles = getStyles(customTheme);
+  const nav = useNavigation();
   const { setQueue, play, queue, currentIndex } = usePlayerStore();
   const optionsRef = useRef<any>(null);
 
-  const data = allMusics.filter(
-    (x) =>
-      (artist !== undefined && x.artist === artist) ||
-      (genre !== undefined && x.genre === genre),
+  const playlist = useMemo(
+    () => playlists.find((x) => x.id === id) ?? ({} as IPlaylist),
+    [playlists],
   );
-
-  const handleSelectSong = (selectedSong: any) => {
-    if (!selectedSong) return;
-    setQueue(data);
-    play(selectedSong);
-  };
-
-  const shufflePlay = () => {
-    // desordenar a lista
-    var shuffledMusics = Utils.sortMusicList(data, "shuffle");
-    setQueue(shuffledMusics);
-    play(shuffledMusics[0]);
-  };
-
-  const queueNext = () => {
-    if (queue.map((a) => a.id).join(",") === data.map((a) => a.id).join(","))
-      return;
-    queue.splice(currentIndex + 1, 0, ...data);
-    console.log(queue.map((a) => a.title));
-  };
-
-  const appendToQueue = () => {
-    queue.push(...data);
-  };
 
   const addToPlaylist = () => {};
 
   const showOptions = () => optionsRef.current?.open();
-
+  useEffect(() => {
+    nav.setOptions({
+      headerRight: () => (
+        <rn.TouchableOpacity
+          onPress={() => console.log("Fazer funcao de deletar")}
+        >
+          <MaterialIcons
+            name="delete"
+            color={customTheme.colors.danger}
+            size={customTheme.iconSizes.sm}
+          />
+        </rn.TouchableOpacity>
+      ),
+    });
+  }, []);
   return (
-    <Wrapper cStyle={{ justifyContent: "flex-end" }} noPadding>
-      <Text size="md">s</Text>
+    <Wrapper noPadding>
+      <Text size="md">{playlist.name}</Text>
       {/* <Section>
         <rn.View style={styles.photo}>
           <Mural list={data} />

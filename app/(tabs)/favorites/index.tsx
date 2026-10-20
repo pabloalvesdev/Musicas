@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
+import CreatePlaylistModal from "./Modals/CreatePlaylistModal";
 
 function Favorites() {
   const { height } = useWindowDimensions();
@@ -19,6 +20,7 @@ function Favorites() {
     return ["a", "b", "c"].map((a) => ({ label: a, value: a }));
   }, []);
   const [item, setItem] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const checkedAsFavorite = useMemo(
     () => allMusics.filter((m) => m.isFavorite === true),
@@ -27,65 +29,77 @@ function Favorites() {
 
   const mostPlayed = useMemo(() => allMusics.slice(10, 16), [allMusics]);
 
+  const openModal = () => setShowModal(true);
+
   useEffect(() => {
     refreshAllMusics();
-  }, [refreshAllMusics]);
+    refreshPlaylists();
+  }, [refreshAllMusics, refreshPlaylists]);
 
   return (
-    <Wrapper scroll>
-      <Section
-        header={{
-          title: "Mais Tocadas",
-          inside: true,
-        }}
-        isContained
-      >
-        <List
-          horizontal
-          data={mostPlayed}
-          listItem={(li) => <MusicItem item={li.item} />}
-        />
-      </Section>
+    <>
+      <CreatePlaylistModal visible={showModal} setVisible={setShowModal} />
+      <Wrapper scroll>
+        <Section
+          header={{
+            title: "Mais Tocadas",
+            inside: true,
+          }}
+          isContained
+        >
+          <List
+            horizontal
+            data={mostPlayed}
+            listItem={(li) => <MusicItem item={li.item} />}
+          />
+        </Section>
 
-      <Section
-        height={cardHeight}
-        header={{
-          title: "Marcados Como Gostei",
-          inside: true,
-        }}
-        isContained
-      >
-        <List
-          horizontal
-          data={checkedAsFavorite}
-          listItem={(li) => <MusicItem item={li.item} />}
-        />
-      </Section>
+        <Section
+          height={cardHeight}
+          header={{
+            title: "Marcados Como Gostei",
+            inside: true,
+          }}
+          isContained
+        >
+          <List
+            horizontal
+            data={checkedAsFavorite}
+            listItem={(li) => <MusicItem item={li.item} />}
+          />
+        </Section>
 
-      <Section
-        header={{
-          inside: false,
-          title: "Playlists",
-          right: (
-            <TouchableOpacity>
-              <Ionicons name="add" size={customTheme.iconSizes.md} />
-            </TouchableOpacity>
-          ),
-        }}
-      >
-        <List
-          noData={{ text: "Nenhuma playlist ainda" }}
-          data={playlists}
-          listItem={(li) => (
-            <TouchableOpacity
-              onPress={() => router.push("/(tabs)/favorites/playlist")}
-            >
-              <Text size="md">{li.item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </Section>
-    </Wrapper>
+        <Section
+          header={{
+            inside: false,
+            title: "Playlists",
+            right: (
+              <TouchableOpacity onPress={openModal}>
+                <Ionicons name="add" size={customTheme.iconSizes.md} />
+              </TouchableOpacity>
+            ),
+          }}
+        >
+          <List
+            noData={{ text: "Nenhuma playlist ainda" }}
+            data={playlists}
+            listItem={(li) => (
+              <TouchableOpacity
+                key={li.item.id}
+                onPress={() =>
+                  router.navigate({
+                    pathname: "/(tabs)/favorites/playlist",
+                    params: { id: li.item.id },
+                  })
+                }
+              >
+                <Text size="md">{li.item.name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </Section>
+      </Wrapper>
+    </>
   );
 }
 

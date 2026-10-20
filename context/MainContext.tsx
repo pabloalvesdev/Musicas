@@ -95,6 +95,7 @@ const MainProvider = ({ children }: IProps) => {
     try {
       const response = await getPlaylists();
       console.log("📂 Playlists retornadas do SQLite:", response.length);
+      console.log(response);
       setPlaylists(response);
     } catch (error) {
       console.error("❌ Erro ao ler SQLite no Context:", error);
