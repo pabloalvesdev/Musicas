@@ -2,9 +2,10 @@ import { Text, Wrapper } from "@/components";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { IPlaylist, ITheme } from "@/interfaces";
+import { deletePlaylist } from "@/services/playlists";
 import { usePlayerStore } from "@/stores/playerStore";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useMemo, useRef } from "react";
 import * as rn from "react-native";
 
@@ -15,7 +16,7 @@ type Params = {
 const Playlist = () => {
   const { height } = rn.useWindowDimensions();
   const { id } = useLocalSearchParams<Params>();
-  const { playlists } = useMainContext();
+  const { playlists, refreshPlaylists } = useMainContext();
   const { customTheme } = useTheme();
   const styles = getStyles(customTheme);
   const nav = useNavigation();
@@ -29,13 +30,17 @@ const Playlist = () => {
 
   const addToPlaylist = () => {};
 
+  const deleteItem = async () => {
+    await deletePlaylist(playlist);
+    refreshPlaylists();
+    router.back();
+  };
+
   const showOptions = () => optionsRef.current?.open();
   useEffect(() => {
     nav.setOptions({
       headerRight: () => (
-        <rn.TouchableOpacity
-          onPress={() => console.log("Fazer funcao de deletar")}
-        >
+        <rn.TouchableOpacity onPress={deleteItem}>
           <MaterialIcons
             name="delete"
             color={customTheme.colors.danger}
@@ -46,7 +51,7 @@ const Playlist = () => {
     });
   }, []);
   return (
-    <Wrapper noPadding>
+    <Wrapper>
       <Text size="md">{playlist.name}</Text>
       {/* <Section>
         <rn.View style={styles.photo}>

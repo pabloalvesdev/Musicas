@@ -39,7 +39,7 @@ function Favorites() {
   return (
     <>
       <CreatePlaylistModal visible={showModal} setVisible={setShowModal} />
-      <Wrapper scroll>
+      <Wrapper>
         <Section
           header={{
             title: "Mais Tocadas",

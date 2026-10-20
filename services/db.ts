@@ -115,6 +115,10 @@ export const getPlaylistsFromDB = async (): Promise<IPlaylist[]> => {
   );
 };
 
+export const deletePlaylistFromDB = async (id: string) => {
+  await db.runAsync("DELETE FROM playlists WHERE id = ?;", [id]);
+};
+
 export const createPlaylistToDB = async (
   payload: IPlaylistCreate,
 ): Promise<IPlaylist> => {
