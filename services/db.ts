@@ -110,9 +110,33 @@ export const saveSongsToDB = async (songs: IMusic[]): Promise<void> => {
 };
 
 export const getPlaylistsFromDB = async (): Promise<IPlaylist[]> => {
-  return await db.getAllAsync<IPlaylist>(
-    "SELECT * FROM playlists ORDER BY name ASC;",
+  const result = await db.getAllAsync<any>(
+    `SELECT 
+       playlists.id, 
+       playlists.name, 
+       json_group_array(
+         json_object(
+           'id', songs.id,
+           'title', songs.title,
+           'artist', songs.artist,
+           'duration', songs.duration
+         )
+       ) FILTER (WHERE songs.id IS NOT NULL) as musics 
+     FROM playlists 
+     LEFT JOIN playlist_songs ON playlists.id = playlist_songs.playlist_id 
+     LEFT JOIN songs ON playlist_songs.song_id = songs.id 
+     GROUP BY playlists.id 
+     ORDER BY playlists.name ASC;`,
   );
+
+  // Mapeia cada linha para garantir que 'musics' seja um array de verdade
+  return result.map((playlist) => ({
+    ...playlist,
+    musics:
+      typeof playlist.musics === "string"
+        ? JSON.parse(playlist.musics)
+        : playlist.musics,
+  }));
 };
 
 export const deletePlaylistFromDB = async (id: string) => {

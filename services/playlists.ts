@@ -10,7 +10,8 @@ import {
 export async function getPlaylists(): Promise<IPlaylist[]> {
   try {
     await initDatabase();
-    return await getPlaylistsFromDB();
+    const result = await getPlaylistsFromDB();
+    return result;
   } catch (error) {
     console.error("❌ Erro ao buscar playlists do SQLite:", error);
     return [];
