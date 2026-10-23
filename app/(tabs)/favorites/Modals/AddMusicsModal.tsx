@@ -50,7 +50,7 @@ const AddMusicsModal = ({ visible, setVisible }: Props) => {
     >
       <Section height={300}>
         <List
-          listItem={(a) => <Text size="md">{a.item.title}</Text>}
+          listItem={(a) => <Text size="md">{a.item.title}</Text>} // colocar um botao de add nesse cara e fazer adiiconar na listagem
           data={data}
         />
       </Section>
