@@ -90,7 +90,11 @@ const Playlist = () => {
 
   return (
     <>
-      <AddMusicsModal visible={showModal} setVisible={setShowModal} />
+      <AddMusicsModal
+        musics={playlist.musics.map((a) => a.id)}
+        visible={showModal}
+        setVisible={setShowModal}
+      />
       <Wrapper cStyle={{ justifyContent: "flex-end" }} noPadding>
         <Section>
           <rn.View style={styles.photo}>
