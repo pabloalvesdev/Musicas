@@ -1,11 +1,12 @@
 import { Text, Wrapper } from "@/components";
 import List from "@/components/List";
 import MoreOptions from "@/components/MoreOptions";
+import Mural from "@/components/Mural";
 import MusicItem from "@/components/MusicItem";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
-import { IPlaylist, ITheme } from "@/interfaces";
+import { IMusic, IPlaylist, ITheme } from "@/interfaces";
 import { deletePlaylist } from "@/services/playlists";
 import { usePlayerStore } from "@/stores/playerStore";
 import Utils from "@/utils";
@@ -43,7 +44,7 @@ const Playlist = () => {
     router.back();
   };
 
-  const handleSelectSong = (selectedSong: any) => {
+  const handleSelectSong = (selectedSong: IMusic) => {
     if (!selectedSong) return;
     setQueue(playlist.musics);
     play(selectedSong);
@@ -91,14 +92,14 @@ const Playlist = () => {
   return (
     <>
       <AddMusicsModal
-        musics={playlist.musics.map((a) => a.id)}
+        playlistId={playlist.id}
         visible={showModal}
         setVisible={setShowModal}
       />
       <Wrapper cStyle={{ justifyContent: "flex-end" }} noPadding>
         <Section>
           <rn.View style={styles.photo}>
-            {/* <Mural list={playlist.musics} /> */}
+            <Mural list={playlist.musics} />
           </rn.View>
           <rn.View
             style={{

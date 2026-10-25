@@ -119,7 +119,9 @@ export const getPlaylistsFromDB = async (): Promise<IPlaylist[]> => {
            'id', songs.id,
            'title', songs.title,
            'artist', songs.artist,
-           'duration', songs.duration
+           'duration', songs.duration,
+           'url', songs.url,
+           'img', songs.img
          )
        ) FILTER (WHERE songs.id IS NOT NULL) as musics 
      FROM playlists 
@@ -180,4 +182,21 @@ export const createPlaylistToDB = async (
     name: payload.name,
     musics: payload.musics,
   };
+};
+
+export const addToPlaylistToDB = async (songId: string, playlistId: string) => {
+  await db.runAsync(
+    "INSERT INTO playlist_songs (song_id, playlist_id) VALUES ($song_id, $playlist_id);",
+    [songId, playlistId],
+  );
+};
+
+export const deleteToPlaylistFromDB = async (
+  songId: string,
+  playlistId: string,
+) => {
+  await db.runAsync(
+    "DELETE FROM playlist_songs WHERE song_id = $song_id AND playlist_id = $playlist_id;",
+    [songId, playlistId],
+  );
 };

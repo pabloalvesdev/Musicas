@@ -4,20 +4,19 @@ import Modal from "@/components/Modal";
 import Section from "@/components/Section";
 import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
-import { IMusic } from "@/interfaces";
-import { createPlaylist } from "@/services/playlists";
+import { IMusic, IPlaylist } from "@/interfaces";
+import { addToPlaylist } from "@/services/playlists";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 interface Props {
-  musics: string[];
+  playlistId: string;
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddMusicsModal = ({ visible, setVisible, musics }: Props) => {
+const AddMusicsModal = ({ visible, setVisible, playlistId }: Props) => {
   const { playlists, primaryColor, refreshPlaylists, allMusics } =
     useMainContext();
   const [itemName, setItemName] = useState("");
@@ -27,28 +26,23 @@ const AddMusicsModal = ({ visible, setVisible, musics }: Props) => {
     modalRef.current?.close();
   }, []);
 
-  const createItem = async () => {
-    const isValid = playlists.find((a) => a.name === itemName) === undefined;
-    if (isValid) {
-      const result = await createPlaylist({ name: itemName, musics: [] });
-      refreshPlaylists();
-      if (result !== undefined)
-        router.navigate({
-          pathname: "/(tabs)/favorites/playlist",
-          params: { id: result.id },
-        });
-    }
-  };
-
   const modalRef = useRef<any>(null); // Crie a referência
 
+  const playlist = useMemo(
+    () => playlists.find((x) => x.id === playlistId) ?? ({} as IPlaylist),
+    [playlists],
+  );
   const data = useMemo(
-    () => allMusics.filter((x) => !musics.includes(x.id)),
-    [],
+    () =>
+      allMusics.filter(
+        (x) => !playlist?.musics.map((a) => a.id).includes(x.id),
+      ),
+    [allMusics, playlist],
   );
 
   const appendItem = (payload: IMusic) => {
-    console.log(`Adicionando item ${payload.title}`);
+    addToPlaylist(playlistId, payload.id);
+    refreshPlaylists();
   };
 
   return (

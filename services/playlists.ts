@@ -1,8 +1,8 @@
 import { IPlaylist } from "@/interfaces";
-import IPlaylistCreate from "@/interfaces/IPlaylistCreate";
 import {
-  createPlaylistToDB,
+  addToPlaylistToDB,
   deletePlaylistFromDB,
+  deleteToPlaylistFromDB,
   getPlaylistsFromDB,
   initDatabase,
 } from "./db";
@@ -18,11 +18,22 @@ export async function getPlaylists(): Promise<IPlaylist[]> {
   }
 }
 
-export async function createPlaylist(payload: IPlaylistCreate) {
+export async function addToPlaylist(playlistId: string, songId: string) {
   try {
     await initDatabase();
-    const result = await createPlaylistToDB(payload);
-    console.log(`💾 playlist [${result.id}]${result.name} salva no SQLite`);
+    const result = await addToPlaylistToDB(songId, playlistId);
+    // console.log(`💾 playlist [${result}]${result.name} salva no SQLite`);
+    return result;
+  } catch (error) {
+    console.error("❌ Erro ao buscar playlists do SQLite:", error);
+  }
+}
+
+export async function removeFromPlaylist(playlistId: string, songId: string) {
+  try {
+    await initDatabase();
+    const result = await deleteToPlaylistFromDB(songId, playlistId);
+    // console.log(`💾 playlist [${result.id}]${result.name} salva no SQLite`);
     return result;
   } catch (error) {
     console.error("❌ Erro ao buscar playlists do SQLite:", error);
