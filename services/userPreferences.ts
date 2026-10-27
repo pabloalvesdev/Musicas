@@ -2,6 +2,7 @@ import IUserPreferences from "@/interfaces/IUserPreferences";
 import { createMMKV } from "react-native-mmkv";
 export const storage = createMMKV();
 const PREFERENCES_KEY = "user_preferences";
+const LASTSYNC_KEY = "last_sync";
 
 export const defaultPreferences: IUserPreferences = {
   autoPlay: true,
@@ -34,5 +35,23 @@ export function saveUserPreferences(
   } catch (error) {
     console.error("Erro ao guardar preferências no MMKV:", error);
     return defaultPreferences;
+  }
+}
+
+export function getLastSync(): string {
+  try {
+    const jsonValue = storage.getString(LASTSYNC_KEY);
+    return jsonValue ?? "";
+  } catch (error) {
+    console.error("Erro ao ler preferências do MMKV:", error);
+    return "";
+  }
+}
+
+export function saveLastSync() {
+  try {
+    storage.set(LASTSYNC_KEY, new Date().toISOString());
+  } catch (error) {
+    console.error("Erro ao guardar preferências no MMKV:", error);
   }
 }

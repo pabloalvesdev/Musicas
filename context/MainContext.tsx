@@ -22,6 +22,7 @@ enum ESwitch {
 
 interface IMainContext {
   isDarkMode: number;
+  autoPlay: number;
   primaryColor: string;
   // dialog: IDialog
   // setDialog: React.Dispatch<React.SetStateAction<IDialog>>
@@ -73,7 +74,7 @@ const MainProvider = ({ children }: IProps) => {
     setUserPreferences(updated);
 
     setIsDarkMode(updated.isDarkMode ? 1 : 0);
-    setAutoPlay(updated.isDarkMode ? 1 : 0);
+    setAutoPlay(updated.autoPlay ? 1 : 0);
     setPrimaryColor(updated.primaryColor);
   };
   // refreshes
@@ -106,6 +107,7 @@ const MainProvider = ({ children }: IProps) => {
   const values = useMemo<IMainContext>(
     () => ({
       isDarkMode,
+      autoPlay,
       setIsDarkMode,
       primaryColor,
       setPrimaryColor,
@@ -119,6 +121,7 @@ const MainProvider = ({ children }: IProps) => {
       updateUserPreferences,
     }),
     [
+      autoPlay,
       isDarkMode,
       primaryColor,
       setPrimaryColor,
