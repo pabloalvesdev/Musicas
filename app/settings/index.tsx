@@ -40,7 +40,7 @@ export default function Settings() {
 
   const openChangeColorModal = () => setShowChangeColorModal(true);
   const lastSync = useMemo(() => {
-    return new Date(getLastSync());
+    return getLastSync();
   }, []);
 
   return (
@@ -90,10 +90,12 @@ export default function Settings() {
               <rn.ActivityIndicator color={customTheme.colors.textSecondary} />
             ) : (
               <Text size="sm">
-                {formatDistanceToNow(lastSync, {
-                  addSuffix: true, // Adiciona o "há" na frente
-                  locale: ptBR,
-                })}
+                {lastSync === ""
+                  ? "Nunca"
+                  : formatDistanceToNow(lastSync, {
+                      addSuffix: true, // Adiciona o "há" na frente
+                      locale: ptBR,
+                    })}
               </Text>
             )}
           </rn.TouchableOpacity>
