@@ -5,8 +5,8 @@ const PREFERENCES_KEY = "user_preferences";
 const LASTSYNC_KEY = "last_sync";
 
 export const defaultPreferences: IUserPreferences = {
-  autoPlay: true,
-  isDarkMode: true,
+  autoPlay: 0,
+  isDarkMode: 1,
   primaryColor: "#0b5583",
 };
 

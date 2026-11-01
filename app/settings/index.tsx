@@ -17,7 +17,6 @@ export default function Settings() {
     primaryColor,
     autoPlay,
     isDarkMode,
-    userPreferences,
     updateUserPreferences,
     refreshAllMusics,
     setLoad,
@@ -30,7 +29,7 @@ export default function Settings() {
     updateUserPreferences(newPreferences);
   };
 
-  const syncWithDb = async () => {
+  const syncMusicsWithDb = async () => {
     setLoad(true);
     await syncLocalSongsWithDB();
     saveLastSync();
@@ -73,14 +72,14 @@ export default function Settings() {
             </Text>
             <Switch
               value={isDarkMode}
-              toogle={(a) => savePreferences({ isDarkMode: a === 1 })}
+              toogle={(a) => savePreferences({ isDarkMode: a })}
             ></Switch>
           </rn.View>
         </Section>
         <Section header={{ inside: false, title: "Player" }} isShadowed>
           <rn.TouchableOpacity
             disabled={load}
-            onPress={syncWithDb}
+            onPress={syncMusicsWithDb}
             style={styles.contRow}
           >
             <Text size="md" color="secondary">
@@ -105,7 +104,7 @@ export default function Settings() {
             </Text>
             <Switch
               value={autoPlay}
-              toogle={(a) => savePreferences({ autoPlay: a === 1 })}
+              toogle={(a) => savePreferences({ autoPlay: a })}
             ></Switch>
           </rn.View>
         </Section>

@@ -1,6 +1,6 @@
 interface UserPreferences {
-  autoPlay: boolean;
-  isDarkMode: boolean;
+  autoPlay: number;
+  isDarkMode: number;
   primaryColor: string;
 }
 
