@@ -4,9 +4,8 @@ import { useMainContext } from "@/context/MainContext";
 import { useTheme } from "@/hooks";
 import { IMusic } from "@/interfaces";
 import { usePlayerStore } from "@/stores/playerStore";
-import { router } from "expo-router";
 import { useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
 const Library = () => {
   const { customTheme } = useTheme();
@@ -36,7 +35,9 @@ const Library = () => {
             justifyContent: "space-around", // Espaça os 2 cards na linha
             marginBottom: 16, // Espaço entre as linhas
           }}
-          renderItem={(a) => <LibraryCardItem identifier={a.item} />}
+          renderItem={(a) => (
+            <LibraryCardItem variant="artist" identifier={a.item} />
+          )}
         />
 
         {/* Aba de Genero */}
@@ -49,30 +50,7 @@ const Library = () => {
             marginBottom: 16, // Espaço entre as linhas
           }}
           renderItem={(a) => (
-            <TouchableOpacity
-              onPress={() =>
-                router.push({
-                  pathname: "/library/details",
-                  params: { genre: a.item },
-                })
-              }
-              style={[
-                {
-                  borderRadius: customTheme.spacing.lg,
-                  width: "45%",
-                  height: 150,
-                  padding: 10,
-                  backgroundColor: customTheme.colors.bgDark,
-                },
-              ]}
-            >
-              <Text size="md" bold>
-                {a.item}
-              </Text>
-              <Text color="secondary" size="xs">
-                14 Musicas
-              </Text>
-            </TouchableOpacity>
+            <LibraryCardItem variant="genre" identifier={a.item} />
           )}
         />
 

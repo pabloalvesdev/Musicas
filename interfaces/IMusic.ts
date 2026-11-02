@@ -4,7 +4,7 @@ export interface IMusic {
   title: string;
   artist: string;
   album: string;
-  genre?: string;
+  genre: string;
   isFavorite?: boolean;
   duration: number;
   img?: string;

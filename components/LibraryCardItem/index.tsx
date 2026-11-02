@@ -7,12 +7,18 @@ import Text from "../Text";
 
 interface Props {
   identifier: string;
+  variant: "artist" | "genre";
 }
 
-const LibraryCardItem = ({ identifier }: Props) => {
+const LibraryCardItem = ({ identifier, variant }: Props) => {
   const { allMusics } = useMainContext();
   const { customTheme } = useTheme();
-  const items = allMusics.filter((x) => x.artist === identifier);
+  // const items = allMusics.filter(
+  //   (x) =>
+  //     (variant === "artist" && x.artist === identifier) ||
+  //     (variant === "genre" && x.genre === identifier),
+  // );
+  const items = allMusics.filter((x) => x[variant] === identifier);
   const numItems = items.length <= 4 ? items.length : 4;
   const widthImg = numItems === 1 ? 100 : 50;
   const heightImg = numItems <= 2 ? 100 : 20;
@@ -24,7 +30,7 @@ const LibraryCardItem = ({ identifier }: Props) => {
       onPress={() =>
         router.push({
           pathname: "/library/details",
-          params: { artist: identifier },
+          params: { [variant]: identifier },
         })
       }
       style={[
