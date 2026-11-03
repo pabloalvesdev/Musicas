@@ -1,20 +1,44 @@
-import { createAudioPlayer } from "expo-audio";
+import { IMusic } from "@/interfaces";
+import { createAudioPlayer, setAudioModeAsync } from "expo-audio";
 
 // Instância única mantida na memória
 const player = createAudioPlayer();
 
-/**
- * Toca uma nova música a partir da URL/URI informada.
- */
-export async function playAudio(url: string) {
-  try {
-    // 1. Carrega a nova fonte no player
-    player.replace(url);
+let audioModeReady = false;
 
-    // 2. Toca a música
+async function ensureAudioMode() {
+  if (audioModeReady) return;
+  await setAudioModeAsync({
+    playsInSilentMode: true,
+    shouldPlayInBackground: true,
+    interruptionMode: "doNotMix",
+  });
+  audioModeReady = true;
+}
+
+export async function playAudio(obj: IMusic) {
+  try {
+    await ensureAudioMode();
+
+    player.replace(obj.url);
     player.play();
+
+    // Cria/atualiza a notificação de mídia nativa (MediaStyle)
+    player.setActiveForLockScreen(
+      true,
+      {
+        title: obj.title || "Tocando música",
+        artist: obj.artist || "Música local",
+        albumTitle: obj.album, // opcional
+        // artworkUrl: obj.img, // opcional: URL da capa
+      },
+      {
+        showSeekBackward: true,
+        showSeekForward: true,
+      },
+    );
   } catch (error) {
-    console.error("Erro ao reproduzir áudio:", error);
+    console.error("Erro ao iniciar reprodução:", error);
   }
 }
 
@@ -31,9 +55,7 @@ export function resumeAudio() {
  * Pausa a reprodução atual.
  */
 export function pauseAudio() {
-  if (player.playing) {
-    player.pause();
-  }
+  if (player.playing) player.pause();
 }
 
 /**
@@ -43,10 +65,12 @@ export function seekAudio(seconds: number) {
   player.seekTo(seconds);
 }
 
-/**
- * Retorna o objeto do player caso você precise registrar ouvintes de evento
- * (ex: para monitorar o progresso em tempo real na barra de seek).
- */
+/** Remove a notificação e os controles da tela de bloqueio. */
+export function stopAudio() {
+  player.pause();
+  player.clearLockScreenControls();
+}
+
 export function getAudioPlayerInstance() {
   return player;
 }

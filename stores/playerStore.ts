@@ -41,7 +41,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     });
 
     // Chama o áudio nativo no player.ts
-    playAudio(song.url);
+    playAudio(song);
   },
 
   // Pausa a reprodução
@@ -70,7 +70,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         currentIndex: nextIndex,
         isPlaying: true,
       });
-      playAudio(nextSongItem.url);
+      playAudio(nextSongItem);
     }
   },
 
@@ -89,7 +89,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         currentIndex: prevIndex,
         isPlaying: true,
       });
-      playAudio(prevSongItem.url);
+      playAudio(prevSongItem);
     }
   },
 
