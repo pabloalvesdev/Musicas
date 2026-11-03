@@ -1,10 +1,25 @@
 // app/_layout.tsx
 import { StackHeader } from "@/components";
+import { AudioModule } from "expo-audio";
 import { Stack } from "expo-router";
 import { LogBox } from "react-native";
 import MainProvider from "../context/MainContext";
 
 LogBox.ignoreLogs(["Text"]);
+
+// Configura o comportamento de áudio para continuar tocando em segundo plano
+async function setupAudioMode() {
+  try {
+    await AudioModule.setAudioModeAsync({
+      shouldPlayInBackground: true, // <--- ISSO É O QUE MANTÉM A MÚSICA TOCANDO EM SEGUNDO PLANO
+    });
+  } catch (error) {
+    console.error("Erro ao configurar o modo de áudio:", error);
+  }
+}
+
+// Chame essa função assim que o app iniciar
+setupAudioMode();
 
 export default function RootLayout() {
   return (
