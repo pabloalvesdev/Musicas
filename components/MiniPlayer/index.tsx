@@ -17,7 +17,7 @@ import {
 export default function MiniPlayer() {
   const router = useRouter();
   const { customTheme } = useTheme();
-  const { userPreferences } = useMainContext();
+  const { autoPlay } = useMainContext();
 
   const {
     currentSong,
@@ -50,7 +50,7 @@ export default function MiniPlayer() {
 
           if (
             status.didJustFinish &&
-            userPreferences.autoPlay &&
+            autoPlay &&
             !(currentIndex + 1 >= queue.length) // NÃO é a ultima
           )
             nextSong();
