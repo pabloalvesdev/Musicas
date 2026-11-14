@@ -30,7 +30,7 @@ export async function playAudio(obj: IMusic) {
         title: obj.title || "Tocando música",
         artist: obj.artist || "Música local",
         albumTitle: obj.album, // opcional
-        // artworkUrl: obj.img, // opcional: URL da capa
+        artworkUrl: obj.img, // opcional: URL da capa
       },
       {
         showSeekBackward: true,

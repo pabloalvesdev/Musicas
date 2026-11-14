@@ -16,7 +16,7 @@ const formatTime = (seconds: number) => {
 };
 
 export default function PlayerScreen() {
-  const { primaryColor, userPreferences } = useMainContext();
+  const { primaryColor, autoPlay } = useMainContext();
   const router = useRouter();
   const { customTheme } = useTheme();
 
@@ -55,7 +55,7 @@ export default function PlayerScreen() {
 
           if (
             status.didJustFinish &&
-            userPreferences.autoPlay &&
+            autoPlay &&
             !(currentIndex + 1 >= queue.length) // NÃO é a ultima
           )
             nextSong();
@@ -134,7 +134,7 @@ export default function PlayerScreen() {
       >
         {currentSong.img !== undefined ? (
           <Image
-            source={{ uri: `data:image/png;base64,${currentSong.img}` }}
+            source={{ uri: currentSong.img }}
             style={{ width: "100%", height: "100%", borderRadius: 20 }}
           />
         ) : (

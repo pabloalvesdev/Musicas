@@ -1,12 +1,37 @@
 import { IMusic } from "@/interfaces";
 import { AudioMetadata } from "@/modules/audio-metadata";
 import { getSongsFromDB, initDatabase, saveSongsToDB } from "@/services/db";
+import * as FileSystem from "expo-file-system/legacy"; // SDK 54+; antes: "expo-file-system"
 import {
   AssetField,
   MediaType,
   Query,
   requestPermissionsAsync,
 } from "expo-media-library";
+
+const FOLDER_COVERS = `${FileSystem.documentDirectory}capas`;
+
+// hash simples do conteúdo: mesma capa => mesmo nome de arquivo
+function pathHash(str: string) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+  }
+  return (h >>> 0).toString(16) + "-" + str.length;
+}
+
+const saveCover = async (base64: string) => {
+  const fmtBase64 = base64.replace(/^data:image\/\w+;base64,/, "");
+  const uri = `${FOLDER_COVERS}${pathHash(fmtBase64)}.jpg`;
+
+  const info = await FileSystem.getInfoAsync(uri);
+  if (!info.exists) {
+    await FileSystem.writeAsStringAsync(uri, fmtBase64, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+  }
+  return uri;
+};
 
 export async function getSavedSongs(): Promise<IMusic[]> {
   try {
@@ -35,6 +60,7 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
     console.log(`🎵 ${assets.length} arquivos encontrados via MediaStore`);
 
     const formattedSongs: IMusic[] = [];
+    await FileSystem.makeDirectoryAsync(FOLDER_COVERS, { intermediates: true });
 
     for (const asset of assets) {
       const uri = await asset.getUri();
@@ -53,6 +79,7 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
       let metaGenre = "Desconhecido";
       let metaArt = "";
       let metaDuration = 0;
+      let coverUri = "";
 
       // Chama seu módulo nativo Kotlin
       try {
@@ -72,6 +99,14 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
         );
       }
 
+      if (metaArt) {
+        try {
+          coverUri = await saveCover(metaArt);
+        } catch (err) {
+          console.warn(`Nao foi possivel salvar CAPA de ${filename}: `, err);
+        }
+      }
+
       formattedSongs.push({
         id: String(asset.id),
         url: String(uri),
@@ -80,7 +115,7 @@ export async function syncLocalSongsWithDB(): Promise<IMusic[]> {
         album: sanitizeText(metaAlbum),
         genre: sanitizeText(metaGenre),
         duration: metaDuration,
-        img: metaArt,
+        img: coverUri,
       });
     }
 

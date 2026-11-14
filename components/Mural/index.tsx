@@ -24,7 +24,7 @@ const Mural = ({ list }: Props) => {
           <Image
             key={list[0].id}
             source={{
-              uri: `data:image/png;base64,${list[0].img}`,
+              uri: list[0].img,
             }}
             style={{
               width: "100%",
@@ -37,7 +37,7 @@ const Mural = ({ list }: Props) => {
               <Image
                 key={it.id}
                 source={{
-                  uri: `data:image/png;base64,${it.img}`,
+                  uri: it.img,
                 }}
                 style={{
                   width: "49.7%",
@@ -52,7 +52,7 @@ const Mural = ({ list }: Props) => {
               <Image
                 key={it.id}
                 source={{
-                  uri: `data:image/png;base64,${it.img}`,
+                  uri: it.img,
                 }}
                 style={{
                   width: "49.7%",

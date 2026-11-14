@@ -107,7 +107,7 @@ export default function MiniPlayer() {
         >
           {currentSong && currentSong.img !== undefined ? (
             <Image
-              source={{ uri: `data:image/png;base64,${currentSong.img}` }}
+              source={{ uri: currentSong.img }}
               style={{ width: "100%", height: "100%" }}
             />
           ) : (

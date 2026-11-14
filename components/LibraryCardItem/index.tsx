@@ -46,7 +46,7 @@ const LibraryCardItem = ({ identifier, variant }: Props) => {
     >
       <Mural list={items} />
       <View>
-        <Text size="md" numberOfLines={1} bold>
+        <Text size="md" marquee bold>
           {identifier}
         </Text>
         <Text color="secondary" size="xs">

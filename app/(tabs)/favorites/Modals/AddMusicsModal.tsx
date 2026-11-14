@@ -60,9 +60,7 @@ const AddMusicsModal = ({ visible, setVisible, playlistId }: Props) => {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <View style={{ width: "90%" }}>
-                <Text numberOfLines={1} size="sm">
-                  {a.item.title}
-                </Text>
+                <Text size="sm">{a.item.title}</Text>
               </View>
               <TouchableOpacity
                 onPress={() => appendItem(a.item)}
