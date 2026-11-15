@@ -52,7 +52,7 @@ const MusicItem = ({ item }: Props) => {
         <View
           style={[
             styles.coverPlaceholder,
-            { backgroundColor: customTheme.colors.bgDefault },
+            { backgroundColor: customTheme.colors.bgDefault, width: "15%" },
           ]}
         >
           {item.img !== undefined ? (
@@ -68,8 +68,13 @@ const MusicItem = ({ item }: Props) => {
             />
           )}
         </View>
-        <View>
-          <Text color={isPlaying ? "primary" : "default"} size="md" bold>
+        <View style={{ width: "80%" }}>
+          <Text
+            marquee
+            color={isPlaying ? "primary" : "default"}
+            size="md"
+            bold
+          >
             {item.title}
           </Text>
           <Text size="sm" color="secondary">

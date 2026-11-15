@@ -9,10 +9,10 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import Text from "../Text";
 
 export default function MiniPlayer() {
   const router = useRouter();
@@ -125,16 +125,10 @@ export default function MiniPlayer() {
 
         {/* 3. Título e Artista (Com estado Padrão) */}
         <View style={styles.textSection}>
-          <Text
-            numberOfLines={1}
-            style={[styles.title, { color: customTheme.colors.textPrimary }]}
-          >
+          <Text marquee size="sm">
             {currentSong ? currentSong.title : "Nenhuma música em execução"}
           </Text>
-          <Text
-            numberOfLines={1}
-            style={[styles.artist, { color: customTheme.colors.textSecondary }]}
-          >
+          <Text size="xs" color="secondary">
             {currentSong
               ? currentSong.artist
               : "Selecione uma faixa para ouvir"}

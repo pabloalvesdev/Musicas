@@ -9,7 +9,6 @@ const getStyles = (baseTheme: ITheme) => {
       padding: 10,
     },
     coverPlaceholder: {
-      width: 42,
       height: 42,
       borderRadius: 8,
       justifyContent: "center",

@@ -6,7 +6,7 @@ import { usePlayerStore } from "@/stores/playerStore";
 import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const formatTime = (seconds: number) => {
   if (!seconds || isNaN(seconds)) return "00:00";
@@ -86,9 +86,9 @@ export default function PlayerScreen() {
             color={customTheme.colors.textPrimary}
           />
         </TouchableOpacity>
-        <Text style={{ color: customTheme.colors.textSecondary }}>
+        {/* <Text style={{ color: customTheme.colors.textSecondary }}>
           Nenhuma música tocando
-        </Text>
+        </Text> */}
       </View>
     );
   }
@@ -114,14 +114,9 @@ export default function PlayerScreen() {
             color={customTheme.colors.textPrimary}
           />
         </TouchableOpacity>
-        <Text
-          style={[
-            styles.headerTitle,
-            { color: customTheme.colors.textSecondary },
-          ]}
-        >
+        <MyText size="xs" bold color="secondary">
           TOCANDO AGORA
-        </Text>
+        </MyText>
         <View style={{ width: 32 }} />
       </View>
 
@@ -138,14 +133,14 @@ export default function PlayerScreen() {
             style={{ width: "100%", height: "100%", borderRadius: 20 }}
           />
         ) : (
-          <Feather name="disc" size={140} color={customTheme.primaryColor} />
+          <Feather name="disc" size={140} color={primaryColor} />
         )}
       </View>
 
       {/* Título e Artista */}
       <View style={styles.infoContainer}>
-        <View style={{ flex: 1 }}>
-          <MyText size="lg" bold>
+        <View style={{ flex: 1, marginRight: customTheme.spacing.md }}>
+          <MyText size="lg" bold marquee>
             {currentSong.title}
           </MyText>
           <MyText size="sm" color="secondary">
@@ -176,23 +171,19 @@ export default function PlayerScreen() {
               styles.progressBarFill,
               {
                 width: `${progressPercent}%`,
-                backgroundColor: customTheme.primaryColor,
+                backgroundColor: primaryColor,
               },
             ]}
           />
         </View>
 
         <View style={styles.timeRow}>
-          <Text
-            style={{ color: customTheme.colors.textSecondary, fontSize: 12 }}
-          >
+          <MyText size="xxs" color="secondary">
             {formatTime(currentTime)}
-          </Text>
-          <Text
-            style={{ color: customTheme.colors.textSecondary, fontSize: 12 }}
-          >
+          </MyText>
+          <MyText size="xxs" color="secondary">
             {formatTime(duration)}
-          </Text>
+          </MyText>
         </View>
       </View>
 
@@ -216,10 +207,7 @@ export default function PlayerScreen() {
 
         <TouchableOpacity
           onPress={() => (isPlaying ? pause() : resume())}
-          style={[
-            styles.playButton,
-            { backgroundColor: customTheme.primaryColor },
-          ]}
+          style={[styles.playButton, { backgroundColor: primaryColor }]}
         >
           <Ionicons
             name={isPlaying ? "pause" : "play"}
