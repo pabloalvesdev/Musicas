@@ -82,13 +82,17 @@ const MusicItem = ({ item }: Props) => {
           </Text>
         </View>
       </View>
-      {isPlaying && (
-        <View
-          style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}
-        >
+      <View
+        style={{
+          width: "5%",
+          alignItems: "flex-end",
+          justifyContent: "center",
+        }}
+      >
+        {isPlaying && (
           <Feather name={FRAMES[frameIndex]} size={20} color={primaryColor} />
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 };
